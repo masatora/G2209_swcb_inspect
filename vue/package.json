@@ -13,12 +13,16 @@
     "stage": "quasar dev -H 192.168.0.110 -p 10090"
   },
   "dependencies": {
+    "@quasar/extras": "^1.15.7",
     "axios": "^0.21.1",
-    "pinia": "^2.0.11",
-    "@quasar/extras": "^1.0.0",
-    "quasar": "^2.6.0",
+    "json-form-data": "^1.7.2",
+    "pinia": "^2.0.27",
+    "quasar": "^2.10.2",
+    "ramda": "^0.28.0",
+    "vite-plugin-windicss": "^1.8.8",
     "vue": "^3.0.0",
-    "vue-router": "^4.0.0"
+    "vue-router": "^4.0.0",
+    "windicss": "^3.5.6"
   },
   "devDependencies": {
     "eslint": "^8.10.0",

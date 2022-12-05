@@ -9,8 +9,27 @@
 // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js
 
 const { configure } = require('quasar/wrappers')
+const windiConfigrue = require('vite-plugin-windicss')
+const env = require('./env')
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx) {
+  let envConfig = {}
+  let publicPath = ''
+
+  if (ctx.prod) {
+    publicPath = '/ntpcswc'
+    envConfig = env.prod
+  } else {
+    publicPath = '/'
+    if (process.env.SANIC_APP_ENV === 'stage') {
+      envConfig = env.stage
+    } else if (process.env.SANIC_APP_ENV === 'beta') {
+      envConfig = env.beta
+    } else {
+      envConfig = env.dev
+    }
+  }
+
   return {
     eslint: {
       // fix: true,
@@ -53,12 +72,16 @@ module.exports = configure(function (/* ctx */) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
+      env: envConfig,
       target: {
         browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
         node: 'node16'
       },
-
-      vueRouterMode: 'hash' // available values: 'hash', 'history'
+      publicPath,
+      vitePlugins: [
+        [windiConfigrue.default, { attributify: true }]
+      ],
+      vueRouterMode: 'history' // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
       // vueOptionsAPI: false,
@@ -85,7 +108,7 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
       // https: true
-      open: true // opens browser window automatically
+      open: false // opens browser window automatically
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
@@ -93,7 +116,7 @@ module.exports = configure(function (/* ctx */) {
       config: {},
 
       // iconSet: 'material-icons', // Quasar icon set
-      // lang: 'en-US', // Quasar language pack
+      lang: 'zh-TW', // Quasar language pack
 
       // For special cases outside of where the auto-import strategy can have an impact
       // (like functional components as one of the examples),
@@ -103,7 +126,9 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Dialog', 'Notify', 'Loading'
+      ]
     },
 
     // animations: 'all', // --- includes all animations
