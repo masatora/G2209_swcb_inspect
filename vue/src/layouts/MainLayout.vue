@@ -62,18 +62,39 @@
         </q-card-section>
       </q-card>
     </q-expansion-item>
+    <q-item>
+      <div class="w-full">
+        <q-btn icon="auto_fix_off" flat dense @click="clearCanvas()" />
+        <canvas id="canvas" class="w-full h-300px" />
+      </div>
+    </q-item>
   </q-list>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, onMounted, ref } from 'vue'
+import SmoothSignature from 'smooth-signature'
 
 export default defineComponent({
   name: 'MainLayout',
   components: {
   },
   setup () {
+    let signature
+    onMounted(() => {
+      const canvas = document.getElementById('canvas')
+      signature = new SmoothSignature(canvas, {
+        scale: 4,
+        color: '#000000',
+        bgColor: '#efefef'
+      })
+      console.log(canvas, signature)
+    })
+
     return {
+      clearCanvas () {
+        signature.clear()
+      },
       isShowDialog: ref({
         district: false
       }),
@@ -86,3 +107,6 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="sass">
+</style>

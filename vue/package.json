@@ -19,6 +19,7 @@
     "pinia": "^2.0.27",
     "quasar": "^2.10.2",
     "ramda": "^0.28.0",
+    "smooth-signature": "^1.0.12",
     "vite-plugin-windicss": "^1.8.8",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0",
