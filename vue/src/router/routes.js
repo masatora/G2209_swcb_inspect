@@ -2,6 +2,10 @@
 const routes = [
   {
     path: '/',
+    component: () => import('layouts/table.vue')
+  },
+  {
+    path: '/form',
     component: () => import('layouts/MainLayout.vue')
   },
 
