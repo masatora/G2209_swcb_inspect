@@ -195,14 +195,23 @@
         <q-btn color="primary" icon="send" @click.prevent="submit" label="確認送出" />
       </div>
     </q-item>
+    <q-item>
+      <div class="w-full">
+        <q-btn icon="auto_fix_off" flat dense @click="clearCanvas()" />
+        <canvas id="canvas" class="w-full h-300px" />
+      </div>
+    </q-item>
   </q-list>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+
+import { defineComponent, onMounted, ref } from 'vue'
 import axios from 'axios'
 import { info, infoPerson, attendees, violation, conclusion } from './data'
 import { useRouter } from 'vue-router'
+import SmoothSignature from 'smooth-signature'
+
 
 let districtData
 async function getVillage () {
@@ -241,7 +250,20 @@ export default defineComponent({
       console.log('-------送出表單 1.打API到資料庫以及2.製作PDF------')
       router.push({ path: '/' })
     }
+    let signature
+    onMounted(() => {
+      const canvas = document.getElementById('canvas')
+      signature = new SmoothSignature(canvas, {
+        scale: 4,
+        color: '#000000',
+        bgColor: '#efefef'
+      })
+      console.log(canvas, signature)
+    })
     return {
+      clearCanvas () {
+        signature.clear()
+      },
       attendees,
       info,
       infoPerson,
@@ -293,3 +315,6 @@ export default defineComponent({
   }
 })
 </script>
+
+<style lang="sass">
+</style>
