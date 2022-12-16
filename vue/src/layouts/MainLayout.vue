@@ -1,5 +1,5 @@
 <template >
-  <div class="w-full h-full lg:px-100 md:px-20">
+  <div class="w-full h-full lg:px-100 md:px-20 py-2">
     <q-list class="h-full overflow-y-auto" bordered>
       <q-item-label class="text-2xl text-center text-bold p-3">新北市政府農業局違規使用山坡地案件現場會勘紀錄表</q-item-label>
       <q-item>
@@ -42,33 +42,29 @@
       <q-expansion-item class="text-lg text-bold my-2 px-4" header-class="bg-blue-1" expand-separator icon="supervisor_account" label="會勘單位與人員">
         <q-card>
           <q-card-section>
-            <q-item v-for="_attendees, n of attendees" :key="n">
-              <q-item-section class="text-lg text-black text-bold" side>{{ _attendees.name }}</q-item-section>
-              <q-item-section>
-                <template v-if="_attendees.type === 'select'">
-                  <q-select v-model="inspectRecord[_attendees.name]" :options="_attendees.data" :label=_attendees.label filled dense />
-                </template>
-                <template v-else>
-                  <q-input v-model="inspectRecord[_attendees.name]" :label=_attendees.label filled dense />
-                </template>
-              </q-item-section>
-              <q-item-section side>
-                <q-btn icon="edit" color="grey-3" class="text-grey-7" @click="isShowCanvas = !isShowCanvas" dense />
-                <!-- <q-dialog v-model="isShowDialog.district">
-                  <q-card class="w-50vw h-50vh">
-                    <q-card-section class="flex justify-end p-2">
-                      <q-btn icon="close" flat round dense v-close-popup />
-                    </q-card-section>
-                    <q-card-section>
-                      <div class="w-full">
-                        <q-btn icon="auto_fix_off" flat dense @click="clearCanvas()" />
-                        <canvas id="canvas" class="w-full h-300px" />
-                      </div>
-                    </q-card-section>
-                  </q-card>
-                </q-dialog> -->
-              </q-item-section>
-            </q-item>
+            <div v-for="_attendees, n of attendees" :key="n">
+              <div class="grid grid-cols-[0.4fr,1.6fr,0.1fr] gap-5 flex items-center py-2">
+                <span>{{ _attendees.name }}</span>
+                <span>
+                  <template v-if="_attendees.type === 'select'">
+                    <q-select v-model="inspectRecord[_attendees.name].value" :options="_attendees.data" :label=_attendees.label filled dense />
+                  </template>
+                  <template v-else>
+                    <q-input v-model="inspectRecord[_attendees.name].value" :label=_attendees.label filled dense />
+                  </template>
+                </span>
+                <span>
+                  <q-btn icon="edit" color="grey-3" class="text-grey-7" @click="isShowCanvas = !isShowCanvas; signTargetName = _attendees.name" dense />
+                </span>
+              </div>
+              <div class="py-3" v-if="inspectRecord[_attendees.name].sign.length > 0">
+                <q-carousel swipeable animated v-model="inspectRecord[_attendees.name].slide" thumbnails infinite>
+                  <template v-for="(v, k) in inspectRecord[_attendees.name].sign" :key="k">
+                    <q-carousel-slide :name="k + 1" :img-src="v" />
+                  </template>
+                </q-carousel>
+              </div>
+            </div>
           </q-card-section>
         </q-card>
       </q-expansion-item>
@@ -77,11 +73,9 @@
           <q-card-section>
             <q-item>
               <q-item-section class="text-lg text-black text-bold" side>衛星定位座標(TWD97) </q-item-section>
-              <q-item-section side>X座標</q-item-section>
               <q-item-section>
                 <q-input v-model="inspectRecord['TWD97_X']" label="請輸入X座標" filled dense />
               </q-item-section>
-              <q-item-section side>Y座標</q-item-section>
               <q-item-section>
                 <q-input v-model="inspectRecord['TWD97_Y']" label="請輸入Y座標" filled dense />
               </q-item-section>
@@ -128,7 +122,7 @@
         </q-item-section>
         <q-item-section class="text-lg text-black text-bold" side>輔導類別: </q-item-section>
         <q-item-section>
-          <q-toggle v-model="inspectRecord[guidance]" checked-icon="check" color="green" label="移請水土保持服務團指導實施水土保持處理與維護" unchecked-icon="clear"/>
+          <q-toggle v-model="inspectRecord['輔導類別']" checked-icon="check" color="green" label="移請水土保持服務團指導實施水土保持處理與維護" unchecked-icon="clear"/>
         </q-item-section>
       </q-item>
       <q-item>
@@ -137,7 +131,7 @@
         </q-item-section>
         <q-item-section class="text-lg text-black text-bold" side>各單位意見: </q-item-section>
         <q-item-section>
-          <q-input v-model="inspectRecord[各單位意見]" type="textarea" filled dense/>
+          <q-input v-model="inspectRecord['各單位意見']" type="textarea" filled dense/>
         </q-item-section>
       </q-item>
       <q-item>
@@ -146,7 +140,7 @@
         </q-item-section>
         <q-item-section class="text-lg text-black text-bold" side>請行為人陳述意見: </q-item-section>
         <q-item-section>
-          <q-input v-model="inspectRecord[行為人意見]" type="textarea" filled dense/>
+          <q-input v-model="inspectRecord['行為人意見']" type="textarea" filled dense/>
         </q-item-section>
       </q-item>
       <q-item>
@@ -205,16 +199,24 @@
       </q-item>
     </q-list>
     <div id="canvasContainer" v-show="isShowCanvas">
-      <q-card class="w-1/2 h-1/2">
-        <q-card-section>
-          <div class="flex justify-between">
-            <q-btn icon="auto_fix_off" flat dense @click="clearCanvas()" />
-            <q-btn icon="close" flat dense @click="isShowCanvas = false" />
+      <q-card class="lg:(w-1/2 h-1/2) md:(w-3/4 h-1/2) grid grid-rows-[0.1fr,1.9fr]">
+        <q-btn class="absolute top-1 right-1 z-3" icon="close" flat rounded dense @click="isShowCanvas = false; signTargetName = ''; clearCanvas()" />
+        <q-card-section class="p-0">
+          <div class="flex justify-evenly px-3 py-1">
+            <q-btn icon="auto_fix_off" size="lg" flat dense @click="clearCanvas()">
+              <q-tooltip>清空畫布</q-tooltip>
+            </q-btn>
+            <q-btn icon="undo" size="lg" flat dense @click="undoCanvas()">
+              <q-tooltip>上一動</q-tooltip>
+            </q-btn>
+            <q-btn icon="save_as" size="lg" flat dense @click="saveCanvas()">
+              <q-tooltip>儲存</q-tooltip>
+            </q-btn>
           </div>
         </q-card-section>
-        <q-card-section class="relative">
-          <div class="relative w-full h-100% border-1">
-            <!-- <canvas id="canvas" style="width: 100%; height: 100%" /> -->
+        <q-card-section class="p-0">
+          <div class="w-full h-full">
+            <canvas id="canvas" class="w-full h-full" />
           </div>
         </q-card-section>
       </q-card>
@@ -254,7 +256,6 @@ export default defineComponent({
   },
   setup () {
     const router = useRouter()
-    setTimeout(() => { console.log(districtData) }, 400)
     const getSectionList = () => {
       console.log('-------------------')
     }
@@ -267,6 +268,41 @@ export default defineComponent({
       router.push({ path: '/' })
     }
     let signature
+    const isShowCanvas = ref(true)
+    const signTargetName = ref('')
+    const inspectRecord = ref({
+      案由: '',
+      時間: '',
+      本市區公所: { value: ref(''), slide: ref(1), sign: ref([]) },
+      本府局處: { value: ref(''), slide: ref(1), sign: ref([]) },
+      本府地政事務所: { value: ref(''), slide: ref(1), sign: ref([]) },
+      本府警察局: { value: ref(''), slide: ref(1), sign: ref([]) },
+      本府違章建築拆除大隊: { v: ref(''), slide: ref(1), sign: ref([]) },
+      其他1: { value: ref(''), slide: ref(1), sign: ref([]) },
+      其他2: { value: ref(''), slide: ref(1), sign: ref([]) },
+      TWD97_X: '',
+      TWD97_y: '',
+      行政區: '',
+      地段: '',
+      小段: '',
+      地號: '',
+      使用面積: '',
+      所有權人: '',
+      行為人姓名: '',
+      行為人出生年月日: '',
+      行為人身分證: '',
+      行為人電話: '',
+      行為人住址: '',
+      違規類別: '',
+      其他違規項目: '',
+      輔導類別: ref(false),
+      各單位意見: '',
+      行為人意見: '',
+      會勘結論: '',
+      其他會勘結論: '',
+      散會: ''
+    })
+
     onMounted(() => {
       const canvas = document.getElementById('canvas')
       signature = new SmoothSignature(canvas, {
@@ -274,12 +310,27 @@ export default defineComponent({
         color: '#000000',
         bgColor: '#efefef'
       })
-      console.log(canvas, signature)
+      // console.log(canvas, signature)
+      isShowCanvas.value = false
+      console.log('efeeeff', navigator.geolocation)
+      navigator.geolocation.getCurrentPosition(pos => {
+        console.log(pos)
+      })
     })
+
     return {
-      isShowCanvas: ref(false),
+      isShowCanvas,
+      signTargetName,
       clearCanvas () {
         signature.clear()
+      },
+      undoCanvas () {
+        signature.undo()
+      },
+      saveCanvas () {
+        const r = signature.getPNG()
+        inspectRecord.value[signTargetName.value].sign.push(r)
+        alert('已儲存簽名檔')
       },
       attendees,
       info,
@@ -291,43 +342,10 @@ export default defineComponent({
       getSectionList,
       cancel,
       submit,
-      guidance: ref(false),
       isShowDialog: ref({
         district: false
       }),
-      inspectRecord: ref({
-        填寫人: '',
-        案由: '',
-        時間: '',
-        本市區公所: '',
-        本府局處: '',
-        本市地政事務所: '',
-        本府警察局: '',
-        本府違章建築拆除大隊: '',
-        其他1: '',
-        其他2: '',
-        TWD97_X: '',
-        TWD97_y: '',
-        行政區: '',
-        地段: '',
-        小段: '',
-        地號: '',
-        使用面積: '',
-        所有權人: '',
-        行為人姓名: '',
-        行為人出生年月日: '',
-        行為人身分證: '',
-        行為人電話: '',
-        行為人住址: '',
-        違規類別: '',
-        其他違規項目: '',
-        guidance: '',
-        各單位意見: '',
-        行為人意見: '',
-        會勘結論: '',
-        其他會勘結論: '',
-        散會: ''
-      })
+      inspectRecord
     }
   }
 })

@@ -19,6 +19,7 @@
     "axios": "^0.21.1",
     "json-form-data": "^1.7.2",
     "pinia": "^2.0.27",
+    "proj4": "^2.8.0",
     "quasar": "^2.10.2",
     "ramda": "^0.28.0",
     "smooth-signature": "^1.0.12",
