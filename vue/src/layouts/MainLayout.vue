@@ -1,6 +1,6 @@
 <template >
-  <div class="w-full h-full lg:px-100 md:px-20 py-2">
-    <q-list class="h-full overflow-y-auto" bordered>
+  <div class="w-full h-full">
+    <q-list class="h-full lg:px-100 md:px-20 overflow-y-auto" bordered>
       <q-item-label class="text-2xl text-center text-bold p-3">新北市政府農業局違規使用山坡地案件現場會勘紀錄表</q-item-label>
       <q-item>
         <q-item-section side>
@@ -58,9 +58,16 @@
                 </span>
               </div>
               <div class="py-3" v-if="inspectRecord[_attendees.name].sign.length > 0">
-                <q-carousel swipeable animated v-model="inspectRecord[_attendees.name].slide" thumbnails infinite>
+                <q-carousel v-model="inspectRecord[_attendees.name].slide" ref="carousel" thumbnails infinite swipeable animated>
                   <template v-for="(v, k) in inspectRecord[_attendees.name].sign" :key="k">
                     <q-carousel-slide :name="k + 1" :img-src="v" />
+                  </template>
+                  <template v-slot:control>
+                    <q-carousel-control position="top-left">
+                      <q-btn class="absolute top-0 left-0" icon="delete" color="negative" @click="deletcSign(_attendees.name, $refs.carousel[0].modelValue)" flat round dense>
+                        <q-tooltip>刪除此簽名</q-tooltip>
+                      </q-btn>
+                    </q-carousel-control>
                   </template>
                 </q-carousel>
               </div>
@@ -71,125 +78,157 @@
       <q-expansion-item class="text-lg text-bold my-2 px-4" header-class="bg-blue-1" expand-separator icon="place" label="土地基本資料">
         <q-card>
           <q-card-section>
-            <q-item>
-              <q-item-section class="text-lg text-black text-bold" side>衛星定位座標(TWD97) </q-item-section>
-              <q-item-section>
-                <q-input v-model="inspectRecord['TWD97_X']" label="請輸入X座標" filled dense />
-              </q-item-section>
-              <q-item-section>
-                <q-input v-model="inspectRecord['TWD97_Y']" label="請輸入Y座標" filled dense />
-              </q-item-section>
-            </q-item>
-            <q-item v-for="_info, i of info" :key="i">
-              <q-item-section class="text-lg text-black text-bold" side>{{ _info.name }}</q-item-section>
-              <q-item-section>
-                <q-select v-show="(_info.type === 'select')" v-model="inspectRecord[_info.name]" :options="_info.data" :label=_info.label filled dense/>
-                <q-select v-show="(_info.type === 'select_district')" v-model="inspectRecord[_info.name]" @update:model-value="getSectionList()" :options="_info.data" :label=_info.label filled dense/>
-                <q-input v-show="(_info.type === 'input')" v-model="inspectRecord[_info.name]" :label=_info.label filled dense />
-              </q-item-section>
-            </q-item>
+            <div>
+              <div class="grid grid-cols-[0.4fr,1.6fr,0.1fr] gap-5 flex items-center py-2">
+                <span>定位座標(TWD97)</span>
+                <span class="row">
+                  <span class="col px-3">
+                    <q-input v-model="inspectRecord['TWD97_X']" label="請輸入X座標" filled dense />
+                  </span>
+                  <span class="col px-3">
+                    <q-input v-model="inspectRecord['TWD97_Y']" label="請輸入Y座標" filled dense />
+                  </span>
+                </span>
+                <span>
+                  <q-btn icon="pin_drop" color="grey-3" class="text-grey-7" @click="wgs84ToTwd97()" dense />
+                </span>
+              </div>
+            </div>
+            <div v-for="_info, i of info" :key="i">
+              <div class="grid grid-cols-[0.4fr,1.6fr] gap-5 flex items-center py-2">
+                <span>{{ _info.name }}</span>
+                <span>
+                  <template v-if="_info.type === 'select'">
+                    <q-select v-model="inspectRecord[_info.name]" :options="_info.data" :label=_info.label filled dense />
+                  </template>
+                  <template v-else-if="_info.type === 'select_district'">
+                    <q-select v-model="inspectRecord[_info.name]" :options="_info.data" :label=_info.label filled dense/>
+                  </template>
+                  <template v-else>
+                    <q-input v-model="inspectRecord[_info.name]" :label=_info.label filled dense />
+                  </template>
+                </span>
+              </div>
+            </div>
           </q-card-section>
         </q-card>
       </q-expansion-item>
       <q-expansion-item class="text-lg text-bold my-2 px-4" header-class="bg-blue-1" expand-separator icon="perm_identity" label="行為人基本資料">
         <q-card>
           <q-card-section>
-            <q-item v-for="_infoPerson, i of infoPerson" :key="i">
-              <q-item-section class="text-lg text-black text-bold" side>{{ _infoPerson.name }}</q-item-section>
-              <q-item-section>
-                <q-select v-show="(_infoPerson.type === 'select')" v-model="inspectRecord[_infoPerson.name]" :options="_infoPerson.data" :label=_infoPerson.label filled dense/>
-                <q-input v-show="(_infoPerson.type === 'input')" v-model="inspectRecord[_infoPerson.name]" :label=_infoPerson.label filled dense />
-              </q-item-section>
-            </q-item>
+            <div v-for="_infoPerson, i of infoPerson" :key="i">
+              <div class="grid grid-cols-[0.4fr,1.6fr] gap-5 flex items-center py-2">
+                <span>{{ _infoPerson.name }}</span>
+                <span>
+                  <template v-if="_infoPerson.type === 'select'">
+                    <q-select v-model="inspectRecord[_infoPerson.name]" :options="_infoPerson.data" :label=_infoPerson.label filled dense />
+                  </template>
+                  <template v-else>
+                    <q-input v-model="inspectRecord[_infoPerson.name]" :label=_infoPerson.label filled dense />
+                  </template>
+                </span>
+              </div>
+            </div>
           </q-card-section>
         </q-card>
       </q-expansion-item>
       <q-item>
-        <q-item-section side>
-          <q-icon name="info" />
-        </q-item-section>
-        <q-item-section class="text-lg text-black text-bold" side>違規類別(可複選): </q-item-section>
-        <q-item-section>
-          <q-select v-model="inspectRecord['違規項目']" :options="violationType" label="請選擇違規項目" filled dense />
-        </q-item-section>
-        <q-item-section>
-          <q-input v-model="inspectRecord['其他違規項目']" label="請輸入其他違規項目" filled dense />
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section side>
-          <q-icon name="info_outline" />
-        </q-item-section>
-        <q-item-section class="text-lg text-black text-bold" side>輔導類別: </q-item-section>
-        <q-item-section>
-          <q-toggle v-model="inspectRecord['輔導類別']" checked-icon="check" color="green" label="移請水土保持服務團指導實施水土保持處理與維護" unchecked-icon="clear"/>
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section side>
-          <q-icon name="edit" />
-        </q-item-section>
-        <q-item-section class="text-lg text-black text-bold" side>各單位意見: </q-item-section>
-        <q-item-section>
-          <q-input v-model="inspectRecord['各單位意見']" type="textarea" filled dense/>
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section side>
-          <q-icon name="edit" />
-        </q-item-section>
-        <q-item-section class="text-lg text-black text-bold" side>請行為人陳述意見: </q-item-section>
-        <q-item-section>
-          <q-input v-model="inspectRecord['行為人意見']" type="textarea" filled dense/>
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section side>
-          <q-icon name="description" />
-        </q-item-section>
-        <q-item-section class="text-lg text-black text-bold" side>會勘結論(可複選): </q-item-section>
-        <q-item-section>
-          <q-select v-model="inspectRecord['會勘結論']" :options="conclusionType" label="請選擇會勘結論項目" filled dense />
-        </q-item-section>
-        <q-item-section>
-          <q-input v-model="inspectRecord['其他會勘結論']" label="請輸入其他會勘結論" filled dense />
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section side>
-          <q-icon name="collections" />
-        </q-item-section>
-        <q-item-section class="text-lg text-black text-bold" side>現場照片: </q-item-section>
-        <q-item-section>
-          <q-input @update:model-value="val => { files = val }" multiple type="file" hint="可選擇多個檔案" filled dense/>
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-item-section side>
-          <q-icon name="watch_later" />
-        </q-item-section>
-        <q-item-section class="text-lg text-black text-bold" side>散會: </q-item-section>
-        <q-item-section>
-          <q-input readonly filled dense>
-            <template v-slot:append>
-              <q-icon name="event" class="cursor-pointer">
-                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                  <div class="p-3">
-                    <div class="q-gutter-md row items-start">
-                      <q-time v-model="inspectRecord['時間']" mask="HH:mm" />
-                    </div>
-                    <div class="pt-3">
-                      <div class="row items-center justify-end my-2">
-                        <q-btn v-close-popup label="關閉" color="grey" flat />
-                        <q-btn v-close-popup label="確定" color="positive" flat />
+        <div class="w-full">
+          <div class="grid grid-cols-[0.1fr,0.5fr,1.6fr] gap-5 flex items-center py-2">
+            <span>
+              <q-icon name="info" color="grey-7" size="sm" />
+            </span>
+            <span class="text-lg text-black text-bold">違規類別(可複選): </span>
+            <span class="row">
+              <span class="col">
+                <q-select v-model="inspectRecord['違規項目']" :options="violationType" label="請選擇違規項目" filled dense />
+              </span>
+              <span class="col-1" />
+              <span class="col">
+                <q-input v-model="inspectRecord['其他違規項目']" label="請輸入其他違規項目" filled dense />
+              </span>
+            </span>
+          </div>
+          <div class="grid grid-cols-[0.1fr,0.5fr,1.6fr] gap-5 flex items-center py-2">
+            <span>
+              <q-icon name="info_outline" color="grey-7" size="sm" />
+            </span>
+            <span class="text-lg text-black text-bold">輔導類別: </span>
+            <span>
+              <q-toggle v-model="inspectRecord['輔導類別']" checked-icon="check" color="green" label="移請水土保持服務團指導實施水土保持處理與維護" unchecked-icon="clear"/>
+            </span>
+          </div>
+          <div class="grid grid-cols-[0.1fr,0.5fr,1.6fr] gap-5 flex items-center py-2">
+            <span>
+              <q-icon name="edit" color="grey-7" size="sm" />
+            </span>
+            <span class="text-lg text-black text-bold">各單位意見: </span>
+            <span>
+              <q-input v-model="inspectRecord['各單位意見']" type="textarea" filled dense/>
+            </span>
+          </div>
+          <div class="grid grid-cols-[0.1fr,0.5fr,1.6fr] gap-5 flex items-center py-2">
+            <span>
+              <q-icon name="edit" color="grey-7" size="sm" />
+            </span>
+            <span class="text-lg text-black text-bold">請行為人陳述意見: </span>
+            <span>
+              <q-input v-model="inspectRecord['行為人意見']" type="textarea" filled dense/>
+            </span>
+          </div>
+          <div class="grid grid-cols-[0.1fr,0.5fr,1.6fr] gap-5 flex items-center py-2">
+            <span>
+              <q-icon name="collections" color="grey-7" size="sm" />
+            </span>
+            <span class="text-lg text-black text-bold">會勘結論(可複選): </span>
+            <span class="row">
+              <span class="col">
+                <q-select v-model="inspectRecord['會勘結論']" :options="conclusionType" label="請選擇會勘結論項目" filled dense />
+              </span>
+              <span class="col-1" />
+              <span class="col">
+                <q-input v-model="inspectRecord['其他會勘結論']" label="請輸入其他會勘結論" filled dense />
+              </span>
+            </span>
+          </div>
+          <div class="grid grid-cols-[0.1fr,0.5fr,1.6fr] gap-5 flex items-center py-2">
+            <span>
+              <q-icon name="collections" color="grey-7" size="sm" />
+            </span>
+            <span class="text-lg text-black text-bold">現場照片: </span>
+            <span>
+              <q-input @update:model-value="val => { files = val }" multiple type="file" hint="可選擇多個檔案" filled dense/>
+            </span>
+          </div>
+          <div class="grid grid-cols-[0.1fr,0.5fr,1.6fr] gap-5 flex items-center py-2">
+            <span>
+              <q-icon name="watch_later" color="grey-7" size="sm" />
+            </span>
+            <span class="text-lg text-black text-bold">散會: </span>
+            <span>
+              <q-input v-model="inspectRecord['散會']" readonly filled dense>
+                <template v-slot:append>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                      <div class="p-3">
+                        <div class="q-gutter-md row items-start">
+                          <q-date v-model="inspectRecord['散會']" mask="YYYY-MM-DD HH:mm" />
+                          <q-time v-model="inspectRecord['散會']" mask="YYYY-MM-DD HH:mm" />
+                        </div>
+                        <div class="pt-3">
+                          <div class="row items-center justify-end my-2">
+                            <q-btn v-close-popup label="關閉" color="grey" flat />
+                            <q-btn v-close-popup label="確定" color="positive" flat />
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-        </q-item-section>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+            </span>
+          </div>
+        </div>
       </q-item>
       <q-item class="grid">
         <div class="q-pa-md q-gutter-sm justify-self-end">
@@ -209,7 +248,7 @@
             <q-btn icon="undo" size="lg" flat dense @click="undoCanvas()">
               <q-tooltip>上一動</q-tooltip>
             </q-btn>
-            <q-btn icon="save_as" size="lg" flat dense @click="saveCanvas()">
+            <q-btn icon="save_as" size="lg" flat dense @click="saveCanvas(); clearCanvas()">
               <q-tooltip>儲存</q-tooltip>
             </q-btn>
           </div>
@@ -226,10 +265,12 @@
 
 <script>
 import { defineComponent, onMounted, ref } from 'vue'
-import axios from 'axios'
 import { info, infoPerson, attendees, violation, conclusion } from './data'
 import { useRouter } from 'vue-router'
+import { forEachObjIndexed } from 'ramda'
 import SmoothSignature from 'smooth-signature'
+import axios from 'axios'
+import Proj4 from 'proj4'
 
 let districtData
 async function getVillage () {
@@ -250,6 +291,10 @@ async function getVillage () {
 getVillage()
 const violationType = violation.map(_V => _V.data)
 const conclusionType = conclusion.map(_C => _C.data)
+Proj4.defs([
+  ['EPSG:4326', '+title=WGS84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'],
+  ['EPSG:3826', '+title=TWD97 TM2 +proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +units=m +no_defs']
+])
 export default defineComponent({
   name: 'MainLayout',
   components: {
@@ -273,13 +318,13 @@ export default defineComponent({
     const inspectRecord = ref({
       案由: '',
       時間: '',
-      本市區公所: { value: ref(''), slide: ref(1), sign: ref([]) },
-      本府局處: { value: ref(''), slide: ref(1), sign: ref([]) },
-      本府地政事務所: { value: ref(''), slide: ref(1), sign: ref([]) },
-      本府警察局: { value: ref(''), slide: ref(1), sign: ref([]) },
-      本府違章建築拆除大隊: { v: ref(''), slide: ref(1), sign: ref([]) },
-      其他1: { value: ref(''), slide: ref(1), sign: ref([]) },
-      其他2: { value: ref(''), slide: ref(1), sign: ref([]) },
+      本市區公所: { value: '', slide: 1, sign: [] },
+      本府局處: { value: '', slide: 1, sign: [] },
+      本府地政事務所: { value: '', slide: 1, sign: [] },
+      本府警察局: { value: '', slide: 1, sign: [] },
+      本府違章建築拆除大隊: { value: '', slide: 1, sign: [] },
+      其他1: { value: '', slide: 1, sign: [] },
+      其他2: { value: '', slide: 1, sign: [] },
       TWD97_X: '',
       TWD97_y: '',
       行政區: '',
@@ -310,12 +355,7 @@ export default defineComponent({
         color: '#000000',
         bgColor: '#efefef'
       })
-      // console.log(canvas, signature)
       isShowCanvas.value = false
-      console.log('efeeeff', navigator.geolocation)
-      navigator.geolocation.getCurrentPosition(pos => {
-        console.log(pos)
-      })
     })
 
     return {
@@ -331,6 +371,29 @@ export default defineComponent({
         const r = signature.getPNG()
         inspectRecord.value[signTargetName.value].sign.push(r)
         alert('已儲存簽名檔')
+      },
+      deletcSign (name, key) {
+        const sign = []
+
+        forEachObjIndexed((v, k) => {
+          console.log(typeof k, typeof key, k !== (key - 1))
+          if (parseInt(k) !== (key - 1)) {
+            sign.push(v)
+          }
+        })(inspectRecord.value[name].sign)
+
+        console.log(sign)
+        inspectRecord.value[name].sign = sign
+      },
+      wgs84ToTwd97 () {
+        const EPSG3826 = new Proj4.Proj('EPSG:3826')
+        const EPSG4326 = new Proj4.Proj('EPSG:4326')
+
+        navigator.geolocation.getCurrentPosition(pos => {
+          const coords = Proj4(EPSG4326, EPSG3826, [pos.coords.longitude, pos.coords.latitude])
+          inspectRecord.value.TWD97_X = coords[0]
+          inspectRecord.value.TWD97_Y = coords[1]
+        })
       },
       attendees,
       info,
