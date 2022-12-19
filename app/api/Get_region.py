@@ -1,7 +1,6 @@
 from __init__ import web
 from sanic.views import HTTPMethodView
 from sanic.response import json
-from sentry_sdk import capture_message
 import requests
 
 class Get_region(HTTPMethodView):
@@ -26,8 +25,5 @@ class Get_region(HTTPMethodView):
       if 'err_str' in locals():
         if web.config['DEBUG']:
           print(err_str)
-
-        if web.config['SENTRY']:
-          capture_message(err_str)
 
       return json(resp, ensure_ascii=False)

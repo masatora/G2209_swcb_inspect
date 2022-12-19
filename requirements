@@ -1,0 +1,4 @@
+psycopg2-binary==2.9.3
+sanic==22.9.1
+sanic-ext==22.6.2
+requests==2.28.1

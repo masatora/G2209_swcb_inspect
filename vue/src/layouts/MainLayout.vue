@@ -47,7 +47,7 @@
         <q-card>
           <q-card-section>
             <div v-for="_attendees, n of attendees" :key="n">
-              <div class="grid grid-cols-[0.4fr,1.6fr,0.1fr] gap-5 flex items-center py-2">
+              <div class="grid grid-cols-[0.4fr,0.9fr,0.1fr] gap-5 flex items-center py-2">
                 <span>{{ _attendees.name }}</span>
                 <span>
                   <template v-if="_attendees.type === 'select'">
@@ -83,13 +83,13 @@
         <q-card>
           <q-card-section>
             <div>
-              <div class="grid grid-cols-[0.4fr,1.6fr,0.1fr] gap-5 flex items-center py-2">
+              <div class="grid grid-cols-[0.4fr,0.9fr,0.1fr] gap-5 flex items-center py-2">
                 <span>定位座標(TWD97)</span>
-                <span class="row">
-                  <span class="col px-3">
+                <span class="grid grid-cols-[1fr,1fr] gap-5 px-2">
+                  <span>
                     <q-input v-model="inspectRecord['TWD97_X']" label="請輸入X座標" filled dense />
                   </span>
-                  <span class="col px-3">
+                  <span>
                     <q-input v-model="inspectRecord['TWD97_Y']" label="請輸入Y座標" filled dense />
                   </span>
                 </span>
@@ -99,7 +99,7 @@
               </div>
             </div>
             <div v-for="_info, i of info" :key="i">
-              <div class="grid grid-cols-[0.4fr,1.6fr] gap-5 flex items-center py-2">
+              <div class="grid grid-cols-[0.4fr,1fr] gap-5 flex items-center py-2">
                 <span>{{ _info.name }}</span>
                 <span>
                   <template v-if="_info.type === 'select'">
@@ -121,7 +121,7 @@
         <q-card>
           <q-card-section>
             <div v-for="_infoPerson, i of infoPerson" :key="i">
-              <div class="grid grid-cols-[0.4fr,1.6fr] gap-5 flex items-center py-2">
+              <div class="grid grid-cols-[0.4fr,1fr] gap-5 flex items-center py-2">
                 <span>{{ _infoPerson.name }}</span>
                 <span>
                   <template v-if="_infoPerson.type === 'select'">
@@ -143,12 +143,11 @@
               <q-icon name="info" color="grey-7" size="sm" />
             </span>
             <span class="text-lg text-black text-bold">違規類別(可複選): </span>
-            <span class="row">
-              <span class="col">
+            <span class="grid grid-cols-[1fr,1fr] gap-5">
+              <span>
                 <q-select v-model="inspectRecord['違規項目']" :options="violationType" label="請選擇違規項目" filled dense />
               </span>
-              <span class="col-1" />
-              <span class="col">
+              <span>
                 <q-input v-model="inspectRecord['其他違規項目']" label="請輸入其他違規項目" filled dense />
               </span>
             </span>
@@ -185,12 +184,11 @@
               <q-icon name="collections" color="grey-7" size="sm" />
             </span>
             <span class="text-lg text-black text-bold">會勘結論(可複選): </span>
-            <span class="row">
-              <span class="col">
+            <span class="grid grid-cols-[1fr,1fr] gap-5">
+              <span>
                 <q-select v-model="inspectRecord['會勘結論']" :options="conclusionType" label="請選擇會勘結論項目" filled dense />
               </span>
-              <span class="col-1" />
-              <span class="col">
+              <span>
                 <q-input v-model="inspectRecord['其他會勘結論']" label="請輸入其他會勘結論" filled dense />
               </span>
             </span>
@@ -201,9 +199,16 @@
             </span>
             <span class="text-lg text-black text-bold">現場照片: </span>
             <span>
-              <q-input @update:model-value="val => { files = val }" multiple type="file" hint="可選擇多個檔案" filled dense/>
+              <q-input v-model="uploadImg" @update:model-value="getBase64Img(uploadImg)" type="file" accept=".jpg, .png" filled dense />
             </span>
           </div>
+          <template v-if="inspectRecord['現場照片'].length > 0">
+            <div class="pb-2" v-for="(v, k) in inspectRecord['現場照片']" :key="k">
+              <div class="flex justify-end bg-grey-3">
+                <img :src="v" />
+              </div>
+            </div>
+          </template>
           <div class="grid grid-cols-[0.1fr,0.5fr,1.6fr] gap-5 flex items-center py-2">
             <span>
               <q-icon name="watch_later" color="grey-7" size="sm" />
@@ -237,7 +242,7 @@
       <q-item class="grid">
         <div class="q-pa-md q-gutter-sm justify-self-end">
           <q-btn color="negative" icon="delete" @click.prevent="cancel" label="取消" />
-          <q-btn color="primary" icon="send" @click.prevent="submit" label="確認送出" />
+          <q-btn color="primary" icon="send" @click="createInspectCase()" label="確認送出" />
         </div>
       </q-item>
     </q-list>
@@ -275,7 +280,7 @@ import { forEachObjIndexed } from 'ramda'
 import SmoothSignature from 'smooth-signature'
 import axios from 'axios'
 import Proj4 from 'proj4'
-
+import jsonToFormData from 'json-form-data'
 let districtData
 async function getVillage () {
   try {
@@ -299,6 +304,7 @@ Proj4.defs([
   ['EPSG:4326', '+title=WGS84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'],
   ['EPSG:3826', '+title=TWD97 TM2 +proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +units=m +no_defs']
 ])
+
 export default defineComponent({
   name: 'MainLayout',
   components: {
@@ -312,9 +318,18 @@ export default defineComponent({
       confirm('請確認是否要離開編輯表單頁面，您所填列的資料不會保存')
       router.push({ path: '/' })
     }
-    const submit = () => {
-      console.log('-------送出表單 1.打API到資料庫以及2.製作PDF------')
-      router.push({ path: '/' })
+
+    const imgToBase64 = (e) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(e)
+        reader.onload = () => {
+          resolve(reader.result)
+        }
+      })
+    }
+    const getBase64Img = async (element) => {
+      inspectRecord.value['現場照片'].push(await imgToBase64(element[0]))
     }
     let signature
     const isShowCanvas = ref(true)
@@ -344,13 +359,41 @@ export default defineComponent({
       行為人住址: '',
       違規類別: '',
       其他違規項目: '',
-      輔導類別: ref(false),
+      輔導類別: false,
       各單位意見: '',
       行為人意見: '',
       會勘結論: '',
+      現場照片: [],
       其他會勘結論: '',
       散會: ''
     })
+
+    const toFormData = (obj) => {
+      return jsonToFormData(obj, {
+        initialFormData: new FormData(),
+        showLeafArrayIndexes: true,
+        includeNullValues: false,
+        mapping: function (value) {
+          if (typeof value === 'boolean') {
+            return +value ? '1' : '0'
+          }
+          return value
+        }
+      })
+    }
+
+    const getObjData = () => {
+      const result = {}
+      forEachObjIndexed((v, k) => {
+        if (v.value !== undefined) {
+          result[k] = v.value
+          result[k + '簽名'] = v.sign
+        } else {
+          result[k] = v
+        }
+      })(inspectRecord.value)
+      return result
+    }
 
     onMounted(() => {
       const canvas = document.getElementById('canvas')
@@ -380,13 +423,11 @@ export default defineComponent({
         const sign = []
 
         forEachObjIndexed((v, k) => {
-          console.log(typeof k, typeof key, k !== (key - 1))
           if (parseInt(k) !== (key - 1)) {
             sign.push(v)
           }
         })(inspectRecord.value[name].sign)
 
-        console.log(sign)
         inspectRecord.value[name].sign = sign
       },
       wgs84ToTwd97 () {
@@ -399,6 +440,24 @@ export default defineComponent({
           inspectRecord.value.TWD97_Y = coords[1]
         })
       },
+      async createInspectCase () {
+        try {
+          const formData = toFormData(getObjData())
+          for (const i of formData) {
+            console.log(i)
+          }
+          const response = await axios.post(process.env.API_URL + '/create_inspect_case', formData)
+          if (response.data.status === 'success') {
+            // router.push({ path: '/' })
+          } else {
+            throw new Error(response.data.msg)
+          }
+        } catch (err) {
+          alert(String(err))
+        }
+      },
+      uploadImg: ref(''),
+      getBase64Img,
       attendees,
       info,
       infoPerson,
@@ -408,10 +467,6 @@ export default defineComponent({
       conclusionType,
       getSectionList,
       cancel,
-      submit,
-      isShowDialog: ref({
-        district: false
-      }),
       inspectRecord
     }
   }

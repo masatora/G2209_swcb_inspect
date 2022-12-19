@@ -1,8 +1,7 @@
 module.exports = {
   dev: {
     BASE_URL: 'http://192.168.50.3:10090',
-    API_URL: 'http://192.168.50.3:10091/api',
-    AUTH_URL: 'http://192.168.50.3:10091/auth'
+    API_URL: 'http://192.168.50.3:10091/api'
   },
   beta: {
     BASE_URL: 'http://192.168.2.110:10090',
