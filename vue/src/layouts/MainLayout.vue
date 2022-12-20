@@ -1,6 +1,6 @@
 <template >
   <div class="w-full h-full">
-    <q-list class="h-full lg:px-100 md:px-20 overflow-y-auto" bordered>
+    <q-list class="h-full lg:px-90 md:px-20 overflow-y-auto" bordered>
       <q-item-label class="text-2xl text-center text-bold p-3">新北市政府農業局違規使用山坡地案件現場會勘紀錄表</q-item-label>
       <q-item>
         <div class="w-full">
@@ -237,6 +237,15 @@
               </q-input>
             </span>
           </div>
+          <div class="grid grid-cols-[0.1fr,0.5fr,1.6fr] gap-5 flex items-center py-2">
+            <span>
+              <q-icon name="person" color="grey-7" size="sm" />
+            </span>
+            <span class="text-lg text-black text-bold">填寫人: </span>
+            <span>
+              <q-input v-model="inspectRecord['填寫人']" filled dense/>
+            </span>
+          </div>
         </div>
       </q-item>
       <q-item class="grid">
@@ -246,7 +255,7 @@
         </div>
       </q-item>
     </q-list>
-    <div id="canvasContainer" v-show="isShowCanvas">
+    <div class="canvasContainer" v-show="isShowCanvas">
       <q-card class="lg:(w-1/2 h-1/2) md:(w-3/4 h-1/2) grid grid-rows-[0.1fr,1.9fr]">
         <q-btn class="absolute top-1 right-1 z-3" icon="close" flat rounded dense @click="isShowCanvas = false; signTargetName = ''; clearCanvas()" />
         <q-card-section class="p-0">
@@ -262,6 +271,7 @@
             </q-btn>
           </div>
         </q-card-section>
+        <q-separator />
         <q-card-section class="p-0">
           <div class="w-full h-full">
             <canvas id="canvas" class="w-full h-full" />
@@ -281,6 +291,7 @@ import SmoothSignature from 'smooth-signature'
 import axios from 'axios'
 import Proj4 from 'proj4'
 import jsonToFormData from 'json-form-data'
+
 let districtData
 async function getVillage () {
   try {
@@ -365,7 +376,8 @@ export default defineComponent({
       會勘結論: '',
       現場照片: [],
       其他會勘結論: '',
-      散會: ''
+      散會: '',
+      填寫人: ''
     })
 
     const toFormData = (obj) => {
@@ -400,7 +412,7 @@ export default defineComponent({
       signature = new SmoothSignature(canvas, {
         scale: 4,
         color: '#000000',
-        bgColor: '#efefef'
+        bgColor: '#FFFFFF'
       })
       isShowCanvas.value = false
     })
@@ -474,7 +486,7 @@ export default defineComponent({
 </script>
 
 <style lang="sass">
-#canvasContainer
+.canvasContainer
   display: flex
   justify-content: center
   align-items: center

@@ -2,7 +2,7 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/table.vue')
+    component: () => import('layouts/InspectCaseList.vue')
   },
   {
     path: '/form',
