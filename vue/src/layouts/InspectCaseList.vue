@@ -125,6 +125,7 @@ export default defineComponent({
     const isShowSign = ref(false)
     const signSrc = ref('')
     const canvasTargetKey = ref('')
+
     onMounted(() => {
       getInspectCaseList()
       const canvas = document.getElementById('canvas')

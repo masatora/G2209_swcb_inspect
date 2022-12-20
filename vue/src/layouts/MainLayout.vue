@@ -292,30 +292,6 @@ import axios from 'axios'
 import Proj4 from 'proj4'
 import jsonToFormData from 'json-form-data'
 
-let districtData
-async function getVillage () {
-  try {
-    const district = await axios.get('https://www.ntpcswc.ntpc.gov.tw/ntpcagr-api/get_region')
-    districtData = district.data.TOWN
-    districtData = districtData.map((_district) => {
-      return {
-        districtCode: _district.CODE,
-        districtName: _district.NAME
-      }
-    })
-  } catch (error) {
-    districtData = []
-    throw new Error(error)
-  }
-}
-getVillage()
-const violationType = violation.map(_V => _V.data)
-const conclusionType = conclusion.map(_C => _C.data)
-Proj4.defs([
-  ['EPSG:4326', '+title=WGS84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'],
-  ['EPSG:3826', '+title=TWD97 TM2 +proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +units=m +no_defs']
-])
-
 export default defineComponent({
   name: 'MainLayout',
   components: {
@@ -325,11 +301,6 @@ export default defineComponent({
     const getSectionList = () => {
       console.log('-------------------')
     }
-    const cancel = () => {
-      confirm('請確認是否要離開編輯表單頁面，您所填列的資料不會保存')
-      router.push({ path: '/' })
-    }
-
     const imgToBase64 = (e) => {
       return new Promise((resolve) => {
         const reader = new FileReader()
@@ -407,7 +378,30 @@ export default defineComponent({
       return result
     }
 
+    let districtData
+    async function getVillage () {
+      try {
+        const district = await axios.get('https://www.ntpcswc.ntpc.gov.tw/ntpcagr-api/get_region')
+        districtData = district.data.TOWN
+        districtData = districtData.map((_district) => {
+          return {
+            districtCode: _district.CODE,
+            districtName: _district.NAME
+          }
+        })
+      } catch (error) {
+        districtData = []
+        throw new Error(error)
+      }
+    }
+
+    Proj4.defs([
+      ['EPSG:4326', '+title=WGS84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'],
+      ['EPSG:3826', '+title=TWD97 TM2 +proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +units=m +no_defs']
+    ])
+
     onMounted(() => {
+      getVillage()
       const canvas = document.getElementById('canvas')
       signature = new SmoothSignature(canvas, {
         scale: 4,
@@ -418,8 +412,6 @@ export default defineComponent({
     })
 
     return {
-      isShowCanvas,
-      signTargetName,
       clearCanvas () {
         signature.clear()
       },
@@ -455,12 +447,10 @@ export default defineComponent({
       async createInspectCase () {
         try {
           const formData = toFormData(getObjData())
-          for (const i of formData) {
-            console.log(i)
-          }
           const response = await axios.post(process.env.API_URL + '/create_inspect_case', formData)
           if (response.data.status === 'success') {
-            // router.push({ path: '/' })
+            alert('新增會勘案件成功')
+            router.push({ path: '/' })
           } else {
             throw new Error(response.data.msg)
           }
@@ -468,17 +458,22 @@ export default defineComponent({
           alert(String(err))
         }
       },
+      cancel () {
+        confirm('請確認是否要離開編輯表單頁面，您所填列的資料不會保存')
+        router.push({ path: '/' })
+      },
+      isShowCanvas,
+      signTargetName,
       uploadImg: ref(''),
       getBase64Img,
       attendees,
       info,
       infoPerson,
       violation,
-      violationType,
+      violationType: violation.map(_V => _V.data),
       conclusion,
-      conclusionType,
+      conclusionType: conclusion.map(_C => _C.data),
       getSectionList,
-      cancel,
       inspectRecord
     }
   }

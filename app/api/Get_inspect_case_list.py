@@ -15,7 +15,7 @@ class Get_inspect_case_list(HTTPMethodView):
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
           cursor.execute('''
             SELECT
-              案由, 時間, 會勘單位與人員, 土地基本資料, 行為人基本資料, 違規類別, 輔導類別, 各單位意見, 行為人意見, 行為人簽名, 會勘結論, 現場照片, 散會, 填寫人,
+              案件編號, 案由, 時間, 會勘單位與人員, 土地基本資料, 行為人基本資料, 違規類別, 輔導類別, 各單位意見, 行為人意見, 行為人簽名, 會勘結論, 現場照片, 散會, 填寫人,
               TO_CHAR(修改時間, 'YYYY-MM-DD HH24:MI') AS 更新時間,
               TO_CHAR(建立時間, 'YYYY-MM-DD HH24:MI') AS 案件時間
             FROM hillside_inspect
