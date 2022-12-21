@@ -20,7 +20,7 @@ class Get_region(HTTPMethodView):
       resp = { 'status': 'fail', 'msg': err_str }
     except Exception as e:
       err_str = str(e)
-      resp = { 'status': 'fail', 'msg': '新增水土保持案件 API 暫時無法服務' }
+      resp = { 'status': 'fail', 'msg': '取得行政區地籍 API 暫時無法服務' }
     finally:
       if 'err_str' in locals():
         if web.config['DEBUG']:

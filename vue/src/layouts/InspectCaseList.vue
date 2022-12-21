@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full">
-    <q-list class="h-full lg:px-90 md:px-20">
+    <q-list class="h-full xl:px-90 lg:px-40 md:px-20">
       <q-item-label class='text-2xl text-center text-bold p-3'>新北市政府農業局違規使用山坡地案件現場會勘紀錄表</q-item-label>
       <q-item>
         <q-item-section />
@@ -21,7 +21,7 @@
       <q-item v-for="(value, key) in inspectCaseList" :key="key" class="text-center" clickable>
         <q-item-section>{{ value['案件時間'] }}</q-item-section>
         <q-item-section>{{ value['案由'] }}</q-item-section>
-        <q-item-section>{{ value['土地基本資料']['行政區'] }}</q-item-section>
+        <q-item-section>{{ value['行政區'] }}</q-item-section>
         <q-item-section>
           <div class="grid grid-cols-[1fr,1fr,1fr] flex justify-center items-center">
             <span>
@@ -34,17 +34,17 @@
                 <q-tooltip>檢視行為人簽名</q-tooltip>
               </q-btn>
             </span>
-            <span>{{ value['行為人基本資料']['行為人姓名'] }}</span>
+            <span>{{ value['行為人姓名'] }}</span>
           </div>
         </q-item-section>
         <q-item-section>{{ value['填寫人'] }}</q-item-section>
         <q-item-section>{{ value['更新時間'] }}</q-item-section>
         <q-item-section>
-          <div class="q-gutter-xs">
-            <q-btn icon="edit" color="grey-7" flat round dense>
-              <q-tooltip>編輯</q-tooltip>
+          <div class="flex justify-evenly">
+            <q-btn icon="description" color="grey-7" flat round dense>
+              <q-tooltip>詳細內容</q-tooltip>
             </q-btn>
-            <q-btn-dropdown icon="file_download" color="primary" dense>
+            <q-btn-dropdown icon="file_download" color="primary" size="12px" dense>
               <q-list>
                 <q-item v-for="_paper, i of paper" :key="i" v-close-popup @click="onItemClick" clickable bordered>
                   <q-item-section>
@@ -61,7 +61,7 @@
       </q-item>
     </q-list>
     <div class="canvasContainer" v-show="isShowCanvas">
-      <q-card class="lg:(w-1/2 h-1/2) md:(w-3/4 h-1/2) grid grid-rows-[0.1fr,1.9fr]">
+      <q-card class="xl:(w-1/2 h-1/2) lg:(w-2/3 h-2/3) md:(w-3/4 h-1/2) grid grid-rows-[0.1fr,1.9fr]">
         <q-btn class="absolute top-1 right-1 z-3" icon="close" flat rounded dense @click="isShowCanvas = false; signTargetName = ''; clearCanvas()" />
         <q-card-section class="p-0">
           <div class="flex justify-evenly px-3 py-1">

@@ -7,7 +7,7 @@ export const attendees = [
   { name: '其他1', type: 'input', label: '請輸入其他單位' },
   { name: '其他2', type: 'input', label: '請輸入其他單位' }]
 export const info = [
-  { name: '行政區', type: 'select_district', label: '請選擇行政區', data: ['板橋區', '中和區', '新莊區', '土城區', '汐止區', '鶯歌區', '淡水區', '五股區', '林口區', '深坑區', '坪林區', '石門區', '萬里區', '雙溪區', '烏來區', '三重區', '永和區', '新店區', '蘆洲區', '樹林區', '三峽區', '瑞芳區', '泰山區', '八里區', '石碇區', '三芝區', '金山區', '平溪區'] },
+  { name: '行政區', type: 'select_district', label: '請選擇行政區' },
   { name: '地段', type: 'select', label: '請選擇地段' },
   { name: '小段', type: 'input', label: '請輸入小段' },
   { name: '地號', type: 'input', label: '請輸入地號' },

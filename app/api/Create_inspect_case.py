@@ -5,6 +5,7 @@ from psycopg2 import connect, DatabaseError
 from datetime import datetime
 from json import loads, dumps
 from re import sub
+from distutils.util import strtobool
 
 class Create_inspect_case(HTTPMethodView):
   async def post(self, request):
@@ -53,6 +54,8 @@ class Create_inspect_case(HTTPMethodView):
         if k in ['本市區公所簽名', '本府局處簽名', '本府地政事務所簽名', '本府警察局簽名', '本府違章建築拆除大隊簽名', '現場照片']:
           data[k].append(value[0])
         else:
+          if key not in ['其他1', '其他2', '其他違規項目', '其他會勘結論']:
+            assert type(value[0]) and value[0] != '', key + '不可為空值'
           data[k] = value[0]
 
       with connect(**loads(web.config['DATABASE_CONFIG_INSPECT'])) as conn:
@@ -99,7 +102,7 @@ class Create_inspect_case(HTTPMethodView):
               '行為人住址': data['行為人住址']
             }),
             '違規類別': data['違規類別'],
-            '輔導類別': data['輔導類別'],
+            '輔導類別': True if strtobool(data['輔導類別']) else False,
             '各單位意見': data['各單位意見'],
             '行為人意見': data['行為人意見'],
             '會勘結論': data['會勘結論'],

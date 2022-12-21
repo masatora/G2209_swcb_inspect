@@ -1,6 +1,6 @@
 <template >
   <div class="w-full h-full">
-    <q-list class="h-full lg:px-90 md:px-20 overflow-y-auto" bordered>
+    <q-list class="h-full xl:px-90 lg:px-40 md:px-20 overflow-y-auto" bordered>
       <q-item-label class="text-2xl text-center text-bold p-3">新北市政府農業局違規使用山坡地案件現場會勘紀錄表</q-item-label>
       <q-item>
         <div class="w-full">
@@ -62,7 +62,7 @@
                 </span>
               </div>
               <div class="py-3" v-if="inspectRecord[_attendees.name].sign.length > 0">
-                <q-carousel v-model="inspectRecord[_attendees.name].slide" ref="carousel" thumbnails infinite swipeable animated>
+                <q-carousel class="border-2" v-model="inspectRecord[_attendees.name].slide" ref="carousel" thumbnails infinite swipeable animated>
                   <template v-for="(v, k) in inspectRecord[_attendees.name].sign" :key="k">
                     <q-carousel-slide :name="k + 1" :img-src="v" />
                   </template>
@@ -102,11 +102,11 @@
               <div class="grid grid-cols-[0.4fr,1fr] gap-5 flex items-center py-2">
                 <span>{{ _info.name }}</span>
                 <span>
-                  <template v-if="_info.type === 'select'">
-                    <q-select v-model="inspectRecord[_info.name]" :options="_info.data" :label=_info.label filled dense />
+                  <template v-if="_info.type === 'select_district'">
+                    <q-select v-model="inspectRecord[_info.name]" :options="district" :label=_info.label @update:model-value="setLot()" filled dense/>
                   </template>
-                  <template v-else-if="_info.type === 'select_district'">
-                    <q-select v-model="inspectRecord[_info.name]" :options="_info.data" :label=_info.label filled dense/>
+                  <template v-else-if="_info.type === 'select'">
+                    <q-select v-model="inspectRecord[_info.name]" :options="lot" :label=_info.label filled dense />
                   </template>
                   <template v-else>
                     <q-input v-model="inspectRecord[_info.name]" :label=_info.label filled dense />
@@ -145,7 +145,7 @@
             <span class="text-lg text-black text-bold">違規類別(可複選): </span>
             <span class="grid grid-cols-[1fr,1fr] gap-5">
               <span>
-                <q-select v-model="inspectRecord['違規項目']" :options="violationType" label="請選擇違規項目" filled dense />
+                <q-select v-model="inspectRecord['違規類別']" :options="violationType" label="請選擇違規項目" filled dense />
               </span>
               <span>
                 <q-input v-model="inspectRecord['其他違規項目']" label="請輸入其他違規項目" filled dense />
@@ -204,7 +204,8 @@
           </div>
           <template v-if="inspectRecord['現場照片'].length > 0">
             <div class="pb-2" v-for="(v, k) in inspectRecord['現場照片']" :key="k">
-              <div class="flex justify-end bg-grey-3">
+              <div class="relative flex justify-end bg-grey-3">
+                <q-btn class="absolute top-2 left-2" icon="delete" color="negative" @click="inspectRecord['現場照片'] = inspectRecord['現場照片'].filter((e, i) => i !== k)" flat round dense />
                 <img :src="v" />
               </div>
             </div>
@@ -256,9 +257,9 @@
       </q-item>
     </q-list>
     <div class="canvasContainer" v-show="isShowCanvas">
-      <q-card class="lg:(w-1/2 h-1/2) md:(w-3/4 h-1/2) grid grid-rows-[0.1fr,1.9fr]">
+      <q-card class="xl:(w-1/2 h-1/2) lg:(w-2/3 h-2/3) md:(w-3/4 h-1/2) grid grid-rows-[0.1fr,1.9fr]">
         <q-btn class="absolute top-1 right-1 z-3" icon="close" flat rounded dense @click="isShowCanvas = false; signTargetName = ''; clearCanvas()" />
-        <q-card-section class="p-0">
+        <q-card-section class="p-0 m-0">
           <div class="flex justify-evenly px-3 py-1">
             <q-btn icon="auto_fix_off" size="lg" flat dense @click="clearCanvas()">
               <q-tooltip>清空畫布</q-tooltip>
@@ -271,8 +272,7 @@
             </q-btn>
           </div>
         </q-card-section>
-        <q-separator />
-        <q-card-section class="p-0">
+        <q-card-section class="w-full h-full p-0 border-2">
           <div class="w-full h-full">
             <canvas id="canvas" class="w-full h-full" />
           </div>
@@ -286,7 +286,7 @@
 import { defineComponent, onMounted, ref } from 'vue'
 import { info, infoPerson, attendees, violation, conclusion } from './data'
 import { useRouter } from 'vue-router'
-import { forEachObjIndexed } from 'ramda'
+import { forEach, forEachObjIndexed } from 'ramda'
 import SmoothSignature from 'smooth-signature'
 import axios from 'axios'
 import Proj4 from 'proj4'
@@ -297,25 +297,12 @@ export default defineComponent({
   components: {
   },
   setup () {
-    const router = useRouter()
-    const getSectionList = () => {
-      console.log('-------------------')
-    }
-    const imgToBase64 = (e) => {
-      return new Promise((resolve) => {
-        const reader = new FileReader()
-        reader.readAsDataURL(e)
-        reader.onload = () => {
-          resolve(reader.result)
-        }
-      })
-    }
-    const getBase64Img = async (element) => {
-      inspectRecord.value['現場照片'].push(await imgToBase64(element[0]))
-    }
     let signature
+    const router = useRouter()
     const isShowCanvas = ref(true)
     const signTargetName = ref('')
+    const district = ref([])
+    const lot = ref([])
     const inspectRecord = ref({
       案由: '',
       時間: '',
@@ -327,7 +314,7 @@ export default defineComponent({
       其他1: { value: '', slide: 1, sign: [] },
       其他2: { value: '', slide: 1, sign: [] },
       TWD97_X: '',
-      TWD97_y: '',
+      TWD97_Y: '',
       行政區: '',
       地段: '',
       小段: '',
@@ -350,7 +337,15 @@ export default defineComponent({
       散會: '',
       填寫人: ''
     })
-
+    const imgToBase64 = (e) => {
+      return new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(e)
+        reader.onload = () => {
+          resolve(reader.result)
+        }
+      })
+    }
     const toFormData = (obj) => {
       return jsonToFormData(obj, {
         initialFormData: new FormData(),
@@ -364,34 +359,74 @@ export default defineComponent({
         }
       })
     }
-
     const getObjData = () => {
       const result = {}
-      forEachObjIndexed((v, k) => {
-        if (v.value !== undefined) {
-          result[k] = v.value
-          result[k + '簽名'] = v.sign
-        } else {
-          result[k] = v
-        }
-      })(inspectRecord.value)
+      try {
+        forEachObjIndexed((v, k) => {
+          if (v.value !== undefined) {
+            if (['行政區', '地段'].includes(k)) {
+              result[k] = v.label
+            } else {
+              result[k] = v.value
+              result[k + '簽名'] = v.sign
+            }
+          } else {
+            if (k === '現場照片') {
+              if (v.length <= 8) {
+                result[k] = v
+              } else {
+                throw new Error(k + '最多可上傳 8 張')
+              }
+            } else {
+              if (!['其他1', '其他2', '其他違規項目', '其他會勘結論'].includes(k)) {
+                if (v !== '') {
+                  result[k] = v
+                } else {
+                  throw new Error(k + '不可為空值')
+                }
+              }
+            }
+          }
+        })(inspectRecord.value)
+      } catch (err) {
+        alert(err)
+      }
       return result
     }
-
-    let districtData
-    async function getVillage () {
+    const getRegion = async () => {
       try {
-        const district = await axios.get('https://www.ntpcswc.ntpc.gov.tw/ntpcagr-api/get_region')
-        districtData = district.data.TOWN
-        districtData = districtData.map((_district) => {
-          return {
-            districtCode: _district.CODE,
-            districtName: _district.NAME
-          }
-        })
-      } catch (error) {
-        districtData = []
-        throw new Error(error)
+        const response = await axios.get(process.env.API_URL + '/get_region')
+
+        if (response.data.status === 'success') {
+          forEach(v => {
+            district.value.push({
+              label: v.NAME,
+              value: v.CODE
+            })
+          })(response.data.row.TOWN)
+        } else {
+          throw new Error(response.data.msg)
+        }
+      } catch (err) {
+        alert(String(err))
+      }
+    }
+    const setLot = async () => {
+      try {
+        const response = await axios.get(process.env.API_URL + '/get_section_list?district=' + inspectRecord.value['行政區'].value)
+
+        if (response.data.status === 'success') {
+          forEach(v => {
+            lot.value.push({
+              label: v.NAME,
+              value: v.SEC
+            })
+          })(response.data.row.RESPONSE[0].SECTION)
+        } else {
+          throw new Error(response.data.msg)
+        }
+      } catch (err) {
+        alert(String(err))
       }
     }
 
@@ -401,7 +436,7 @@ export default defineComponent({
     ])
 
     onMounted(() => {
-      getVillage()
+      getRegion()
       const canvas = document.getElementById('canvas')
       signature = new SmoothSignature(canvas, {
         scale: 4,
@@ -446,35 +481,43 @@ export default defineComponent({
       },
       async createInspectCase () {
         try {
-          const formData = toFormData(getObjData())
-          const response = await axios.post(process.env.API_URL + '/create_inspect_case', formData)
-          if (response.data.status === 'success') {
-            alert('新增會勘案件成功')
-            router.push({ path: '/' })
-          } else {
-            throw new Error(response.data.msg)
+          const data = getObjData()
+          if (Object.keys(data).length > 0) {
+            const formData = toFormData(data)
+            const response = await axios.post(process.env.API_URL + '/create_inspect_case', formData)
+            if (response.data.status === 'success') {
+              alert('新增會勘案件成功')
+              router.push({ path: '/' })
+            } else {
+              throw new Error(response.data.msg)
+            }
           }
         } catch (err) {
           alert(String(err))
         }
       },
+      async getBase64Img (element) {
+        inspectRecord.value['現場照片'].push(await imgToBase64(element[0]))
+      },
       cancel () {
-        confirm('請確認是否要離開編輯表單頁面，您所填列的資料不會保存')
-        router.push({ path: '/' })
+        if (confirm('請確認是否要離開編輯表單頁面，您所填列的資料不會保存')) {
+          router.push({ path: '/' })
+        }
       },
       isShowCanvas,
       signTargetName,
       uploadImg: ref(''),
-      getBase64Img,
       attendees,
       info,
       infoPerson,
       violation,
-      violationType: violation.map(_V => _V.data),
       conclusion,
+      violationType: violation.map(_V => _V.data),
       conclusionType: conclusion.map(_C => _C.data),
-      getSectionList,
-      inspectRecord
+      inspectRecord,
+      district,
+      lot,
+      setLot
     }
   }
 })

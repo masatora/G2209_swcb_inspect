@@ -1,0 +1,44 @@
+<SPEED23_DATA STY_NAME="府簽" STY_VERSION="1">
+  <HEAD>
+    <STYLES>
+      <STYLE S_ID="1" FONTFAMILY="標楷體" FONTSIZE="16" FONTCOLOR="#000000" BACKGROUND="#FFFFFF" UNDERLINE="false" STRIKE="false" ITALIC="false" BOLD="false" SUBSCRIPT="false" SUPERSCRIPT="false" />
+    </STYLES>
+    <PARAGRAPH_STYLES>
+      <PARAGRAPH_STYLE PS_ID="1" LINEHEIGHT="9.70125" HALIGNMENT="LEFT-RIGHT" INDENT="0" SECONDINDENT="16.93333296" />
+      <PARAGRAPH_STYLE PS_ID="2" LINEHEIGHT="9.70125" HALIGNMENT="LEFT-RIGHT" INDENT="5.45" SECONDINDENT="16.93333296" FONTFAMILY="標楷體" FONTSIZE="16" FONTCOLOR="#000000" BACKGROUND="#FFFFFF" UNDERLINE="false" STRIKE="false" ITALIC="false" BOLD="false" SUBSCRIPT="false" SUPERSCRIPT="false" />
+      <PARAGRAPH_STYLE PS_ID="3" LINEHEIGHT="9.70125" HALIGNMENT="LEFT-RIGHT" INDENT="5.45" SECONDINDENT="16.7388889764351" FONTFAMILY="標楷體" FONTSIZE="16" FONTCOLOR="#000000" BACKGROUND="#FFFFFF" UNDERLINE="false" STRIKE="false" ITALIC="false" BOLD="false" SUBSCRIPT="false" SUPERSCRIPT="false" />
+      <PARAGRAPH_STYLE PS_ID="4" LINEHEIGHT="9.70125" HALIGNMENT="LEFT-RIGHT" INDENT="11.000000000000002" SECONDINDENT="22.288888976435103" FONTFAMILY="標楷體" FONTSIZE="16" FONTCOLOR="#000000" BACKGROUND="#FFFFFF" UNDERLINE="false" STRIKE="false" ITALIC="false" BOLD="false" SUBSCRIPT="false" SUPERSCRIPT="false" />
+      <PARAGRAPH_STYLE PS_ID="5" LINEHEIGHT="9.70125" HALIGNMENT="LEFT-RIGHT" INDENT="2.11666662" SECONDINDENT="2.11666662" FONTFAMILY="標楷體" FONTSIZE="16" FONTCOLOR="#000000" BACKGROUND="#FFFFFF" UNDERLINE="false" STRIKE="false" ITALIC="false" BOLD="false" SUBSCRIPT="false" SUPERSCRIPT="false" />
+      <PARAGRAPH_STYLE PS_ID="6" LINEHEIGHT="7.761" HALIGNMENT="LEFT" INDENT="0" SECONDINDENT="0" FONTFAMILY="標楷體" FONTSIZE="16" FONTCOLOR="#000000" BACKGROUND="#FFFFFF" UNDERLINE="false" STRIKE="false" ITALIC="false" BOLD="false" SUBSCRIPT="false" SUPERSCRIPT="false" />
+    </PARAGRAPH_STYLES>
+    <NUMBER_STYLES>
+      <NUMBER_STYLE NS_ID="1" MEMO="公文編號">
+        <LEVEL NS_LVL="1" STARTWORD="" NUMBER="一" FULLWIDTH="true" ENDWORD="、" INDENT="5.45" />
+        <LEVEL NS_LVL="2" STARTWORD="(" NUMBER="一" FULLWIDTH="true" ENDWORD=")" INDENT="14" />
+        <LEVEL NS_LVL="3" STARTWORD="" NUMBER="1" FULLWIDTH="true" ENDWORD="、" INDENT="22" />
+        <LEVEL NS_LVL="4" STARTWORD="(" NUMBER="1" FULLWIDTH="true" ENDWORD=")" INDENT="30" />
+        <LEVEL NS_LVL="5" STARTWORD="" NUMBER="甲" FULLWIDTH="true" ENDWORD="、" INDENT="38" />
+        <LEVEL NS_LVL="6" STARTWORD="(" NUMBER="甲" FULLWIDTH="true" ENDWORD=")" INDENT="45" />
+        <LEVEL NS_LVL="7" STARTWORD="" NUMBER="子" FULLWIDTH="true" ENDWORD="、" INDENT="51" />
+        <LEVEL NS_LVL="8" STARTWORD="(" NUMBER="子" FULLWIDTH="true" ENDWORD=")" INDENT="59" />
+        <LEVEL NS_LVL="9" STARTWORD="" NUMBER="1" FULLWIDTH="true" ENDWORD=")" INDENT="67" />
+      </NUMBER_STYLE>
+    </NUMBER_STYLES>
+    <BULLETS_STYLES />
+    <TABLE_STYLES />
+    <TR_STYLES />
+    <TD_STYLES />
+    <VERSIONS>
+      <VERSION V_ID="1" USER="AG0231" NAME="劉昆嘉" UNIT="山坡地保育科" JOB="約僱人員" DT="2022/04/29 15:25:48" COLOR="#FFFF0000" AGENT="" AGENT_NAME="" AGENT_DEPT_ID="" AGENT_DEPT_NAME=""></VERSION>
+    </VERSIONS>
+    <INK_STYLES />
+    <STICKYNOTE_STYLES />
+  </HEAD>
+  <BODY xml:space="preserve">
+  <FIELD NAME="主旨"><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="1" /></I><I V_ID="1" S_ID="1">主旨：「■■■先生/女士違反水土保持法案」擬依水土保持法處罰鍰新臺幣（下同）■萬元整，簽請核示。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="1" /></I><I V_ID="1" S_ID="1">說明：</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="3" NS_ID="1" NS_LVL="1" NS_NO="1" /></I><I V_ID="1" S_ID="1">依據■■號函及本府■年■月■日會勘紀錄辦理。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="3" NS_ID="1" NS_LVL="1" NS_NO="2" /></I><I V_ID="1" S_ID="1">■■■先生/女士於本市■■區■■段■■小段■地號自有</I><I V_ID="1" S_ID="1">（持分■■■■）</I><I V_ID="1" S_ID="1">之山坡地未先擬具水土保持計畫即擅自■■■■</I><I V_ID="1" S_ID="1">（違規面積：約■■平方公尺），經本府■年■月■日會同相關單位現場勘查屬實（詳會勘紀錄），復經■■地政事務所現場指界，確認系爭土地為本市■■區■■段■■小段■地號無誤，本府並以■年■月■日新北農山字第■■號函請■■■先生/女士陳述意見，惟迄今並未辦理，故本府依權責認定■■■先生/女士為行為人。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="3" NS_ID="1" NS_LVL="1" NS_NO="3" /></I><I V_ID="1" S_ID="1">上項事實已違反水土保持法第8條第1項及12條第1項第4款規定，爰依據同法第33條第1項第2款及「新北市政府處理違反水土保持法案件行政處分裁罰基準」項次■（因本案係屬第■次違規，且違規面積未達/超過■■■平方公尺）之規定處分，處以行政罰鍰■萬元整。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="3" NS_ID="1" NS_LVL="1" NS_NO="4" /></I><I V_ID="1" S_ID="1">違規開發利用行為造成地表裸露部分，爰函請行為人依水土保持法第8條第1項規定實施水土保持處理與維護，自處分書送達之日起2個月內依水土保持技術規範第61條第1項第1款規定於裸露地表實施植生覆蓋，其地被植生覆蓋率應達80%以上，逾期未改者，將依規定辦理。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="3" NS_ID="1" NS_LVL="1" NS_NO="5" /></I><I V_ID="1" S_ID="1">本案涉及各目的事業主管機關法令者，移由各目的事業主管機關依該管法令處理。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="3" NS_ID="1" NS_LVL="1" NS_NO="6" /></I><I V_ID="1" S_ID="1">檢陳資料：</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="4" NS_ID="1" NS_LVL="2" NS_NO="1" /></I><I V_ID="1" S_ID="1">本府■年■月■日現場會勘紀錄。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="4" NS_ID="1" NS_LVL="2" NS_NO="2" /></I><I V_ID="1" S_ID="1">本府■年■月■日現場相片。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="4" NS_ID="1" NS_LVL="2" NS_NO="3" /></I><I V_ID="1" S_ID="1">新北市■■區■■段■■小段■地號土地建物查詢資料。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="4" NS_ID="1" NS_LVL="2" NS_NO="4" /></I><I V_ID="1" S_ID="1">案由：■■號函。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="1" /></I><I V_ID="1" S_ID="1">擬辦：奉核後，函知■■■先生/女士處以罰鍰■萬元，並限期實施水土保持處理與維護。后附函稿2份，併請核判。</I></FIELD><FIELD NAME="年度號"><I V_ID="1">111</I></FIELD><FIELD NAME="日期"><I V_ID="1">2022-04-29 00:0:00.00</I></FIELD><FIELD NAME="單位"><I V_ID="1">農業局</I></FIELD><FIELD NAME="承辦人"><I V_ID="1">劉昆嘉</I></FIELD><FIELD NAME="承辦人電話"><I V_ID="1">(02)29603456 分機2969</I></FIELD><FIELD NAME="檔號"><I V_ID="1">07040401<C CODE="332665" /></I></FIELD><FIELD NAME="案次號"><I V_ID="1">1</I></FIELD><FIELD NAME="保存年限"><I V_ID="1">15</I></FIELD><FIELD NAME="附件用印備註"><I V_ID="1"></I></FIELD><FIELD NAME="決行層級2"><I V_ID="1">二<C CODE="2" /></I></FIELD><FIELD NAME="決行層級1"><I V_ID="1">二<C CODE="2" /></I></FIELD><FIELD NAME="決行者簽名或蓋章"><I V_ID="1"></I></FIELD><FIELD NAME="會辦單位1"><I V_ID="1">蔡先生(奉核後登記)</I></FIELD><FIELD NAME="會辦單位2"><I V_ID="1">蔡先生(奉核後登記)</I></FIELD><FIELD NAME="會辦單位3"><I V_ID="1">蔡先生(奉核後登記)</I></FIELD><FIELD NAME="附件"><I V_ID="1"></I></FIELD><FIELD NAME="全銜"><I V_ID="1"></I></FIELD><FIELD NAME="密等"><I V_ID="1"><C CODE="1" /></I></FIELD><FIELD NAME="擬辦方式"><I V_ID="1">簽稿併陳<C CODE="3" /></I></FIELD><FIELD NAME="已電子交換章戳"><I V_ID="1"></I></FIELD></BODY>
+  <FLOATING />
+  <ATTACHMENTS></ATTACHMENTS>
+  <ADDITIONAL>
+    <RECEIVERS></RECEIVERS>
+  </ADDITIONAL>
+</SPEED23_DATA>

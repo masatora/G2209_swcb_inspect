@@ -1,0 +1,49 @@
+<SPEED23_DATA STY_NAME="函" STY_VERSION="1">
+  <HEAD>
+    <STYLES>
+      <STYLE S_ID="1" FONTFAMILY="標楷體" FONTSIZE="16" FONTCOLOR="#000000" BACKGROUND="#FFFFFF" UNDERLINE="false" STRIKE="false" ITALIC="false" BOLD="false" SUBSCRIPT="false" SUPERSCRIPT="false" />
+    </STYLES>
+    <PARAGRAPH_STYLES>
+      <PARAGRAPH_STYLE PS_ID="1" LINEHEIGHT="9.70125" HALIGNMENT="LEFT-RIGHT" INDENT="0" SECONDINDENT="16.93333296" FONTCOLOR="#000000" BACKGROUND="#FFFFFF" />
+      <PARAGRAPH_STYLE PS_ID="2" LINEHEIGHT="9.70125" HALIGNMENT="LEFT-RIGHT" INDENT="5.45" SECONDINDENT="16.93333296" FONTFAMILY="標楷體" FONTSIZE="16" FONTCOLOR="#000000" BACKGROUND="#FFFFFF" UNDERLINE="false" STRIKE="false" ITALIC="false" BOLD="false" SUBSCRIPT="false" SUPERSCRIPT="false" />
+      <PARAGRAPH_STYLE PS_ID="3" LINEHEIGHT="9.70125" HALIGNMENT="LEFT-RIGHT" INDENT="5.45" SECONDINDENT="16.7388889764351" FONTFAMILY="標楷體" FONTSIZE="16" FONTCOLOR="#000000" BACKGROUND="#FFFFFF" UNDERLINE="false" STRIKE="false" ITALIC="false" BOLD="false" SUBSCRIPT="false" SUPERSCRIPT="false" />
+      <PARAGRAPH_STYLE PS_ID="4" LINEHEIGHT="9.70125" HALIGNMENT="LEFT-RIGHT" INDENT="11.000000000000002" SECONDINDENT="22.288888976435103" FONTFAMILY="標楷體" FONTSIZE="16" FONTCOLOR="#000000" BACKGROUND="#FFFFFF" UNDERLINE="false" STRIKE="false" ITALIC="false" BOLD="false" SUBSCRIPT="false" SUPERSCRIPT="false" />
+      <PARAGRAPH_STYLE PS_ID="5" LINEHEIGHT="9.70125" HALIGNMENT="LEFT-RIGHT" INDENT="0" SECONDINDENT="0" FONTFAMILY="標楷體" FONTSIZE="16" FONTCOLOR="#000000" BACKGROUND="#FFFFFF" UNDERLINE="false" STRIKE="false" ITALIC="false" BOLD="false" SUBSCRIPT="false" SUPERSCRIPT="false" />
+      <PARAGRAPH_STYLE PS_ID="6" LINEHEIGHT="7.761" HALIGNMENT="LEFT" INDENT="0" SECONDINDENT="0" FONTFAMILY="標楷體" FONTSIZE="16" FONTCOLOR="#000000" BACKGROUND="#FFFFFF" UNDERLINE="false" STRIKE="false" ITALIC="false" BOLD="false" SUBSCRIPT="false" SUPERSCRIPT="false" />
+    </PARAGRAPH_STYLES>
+    <NUMBER_STYLES>
+      <NUMBER_STYLE NS_ID="1" MEMO="公文編號">
+        <LEVEL NS_LVL="1" STARTWORD="" NUMBER="一" FULLWIDTH="true" ENDWORD="、" INDENT="5.45" />
+        <LEVEL NS_LVL="2" STARTWORD="(" NUMBER="一" FULLWIDTH="true" ENDWORD=")" INDENT="14" />
+        <LEVEL NS_LVL="3" STARTWORD="" NUMBER="1" FULLWIDTH="true" ENDWORD="、" INDENT="22" />
+        <LEVEL NS_LVL="4" STARTWORD="(" NUMBER="1" FULLWIDTH="true" ENDWORD=")" INDENT="30" />
+        <LEVEL NS_LVL="5" STARTWORD="" NUMBER="甲" FULLWIDTH="true" ENDWORD="、" INDENT="38" />
+        <LEVEL NS_LVL="6" STARTWORD="(" NUMBER="甲" FULLWIDTH="true" ENDWORD=")" INDENT="45" />
+        <LEVEL NS_LVL="7" STARTWORD="" NUMBER="子" FULLWIDTH="true" ENDWORD="、" INDENT="51" />
+        <LEVEL NS_LVL="8" STARTWORD="(" NUMBER="子" FULLWIDTH="true" ENDWORD=")" INDENT="59" />
+        <LEVEL NS_LVL="9" STARTWORD="" NUMBER="1" FULLWIDTH="true" ENDWORD=")" INDENT="67" />
+      </NUMBER_STYLE>
+    </NUMBER_STYLES>
+    <BULLETS_STYLES />
+    <TABLE_STYLES />
+    <TR_STYLES />
+    <TD_STYLES />
+    <VERSIONS>
+      <VERSION V_ID="1" USER="AA5850" NAME="李岳樺" UNIT="山坡地保育科" JOB="約僱人員" DT="2022/07/13 10:03:00" COLOR="#FFFF0000" AGENT="AG0231" AGENT_NAME="劉昆嘉" AGENT_DEPT_ID="1080600" AGENT_DEPT_NAME="山坡地保育科"></VERSION>
+    </VERSIONS>
+    <INK_STYLES />
+    <STICKYNOTE_STYLES />
+  </HEAD>
+  <BODY xml:space="preserve">
+  <FIELD NAME="主旨"><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="1" /></I><I V_ID="1" S_ID="1">主旨：■■■違反「山坡地保育利用條例」相關規定，爰依刑事訴訟法第241條規定，予以告發。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="1" /></I><I V_ID="1" S_ID="1">說明：</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="2" NS_ID="1" NS_LVL="1" NS_NO="1" /></I><I V_ID="1" S_ID="1">依據■■■號函及本府■■■年■■月■■日會勘紀錄辦理。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="3" NS_ID="1" NS_LVL="1" NS_NO="2" /></I><I V_ID="1" S_ID="1">依據臺灣省政府86年11月17日86府農水字第174605號公告，本市</I><I V_ID="1" S_ID="1">■■區■■段■■小段■■■</I><I V_ID="1" S_ID="1">地號土地屬法定山坡地範圍；本案行為人</I><I V_ID="1" S_ID="1">■■■</I><I V_ID="1" S_ID="1">（性別：</I><I V_ID="1" S_ID="1">■</I><I V_ID="1" S_ID="1">，出生年月日：</I><I V_ID="1" S_ID="1">■■</I><I V_ID="1" S_ID="1">年</I><I V_ID="1" S_ID="1">■■</I><I V_ID="1" S_ID="1">月</I><I V_ID="1" S_ID="1">■■</I><I V_ID="1" S_ID="1">日，身分證統一編號：</I><I V_ID="1" S_ID="1">■■■■■■■■■■</I><I V_ID="1" S_ID="1">，住址：</I><I V_ID="1" S_ID="1">■■■■■■■■</I><I V_ID="1" S_ID="1">）未經土地所有權人同意，即擅自</I><I V_ID="1" S_ID="1">■■■■</I><I V_ID="1" S_ID="1">（</I><I V_ID="1" S_ID="1">■■■■■■■■</I><I V_ID="1" S_ID="1">），經本府派員於</I><I V_ID="1" S_ID="1">■■■</I><I V_ID="1" S_ID="1">年</I><I V_ID="1" S_ID="1">■■</I><I V_ID="1" S_ID="1">月</I><I V_ID="1" S_ID="1">■■</I><I V_ID="1" S_ID="1">日會同相關單位人員至現場勘查屬實，</I><I V_ID="1" S_ID="1">■■■</I><I V_ID="1" S_ID="1">是日亦到場坦承係其所為，復經本府請行為人提出合法證明文件及</I><I V_ID="1" S_ID="1">■■區■■段■■小段■■■地號</I><I V_ID="1" S_ID="1">土地所有權人之土地使用同意書，惟迄今並未辦理，故本府依法應予究辦。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="3" NS_ID="1" NS_LVL="1" NS_NO="3" /></I><I V_ID="1" S_ID="1">前述行為已違反「山坡地保育利用條例」第10條：「在公有或他人山坡地內，不得擅自墾殖、占用或從事前條第1至第9款之開發、經營或使用。」之擅自占用規定，又同條例第34條第1項規定：「違反第10條規定者，處6月以上5年以下有期徒刑，得併科新臺幣60萬元以下罰金。」爰依刑事訴訟法第241條規定予以告發。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="3" NS_ID="1" NS_LVL="1" NS_NO="4" /></I><I V_ID="1" S_ID="1">依行政罰法第26條第2項規定，「前項行為如經不起訴處分、緩起訴處分確定或為無罪、免訴、不受理、不付審理、不付保護處分、免刑、緩刑之裁判確定者，得依違反行政法上義務規定裁處之。」故請貴署將偵辦結果（起訴書、不起訴處分書、緩起訴處分書）函知本府以憑辦理後續裁處事宜。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="3" NS_ID="1" NS_LVL="1" NS_NO="5" /></I><I V_ID="1" S_ID="1">檢附相關資料供參：</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="4" NS_ID="1" NS_LVL="2" NS_NO="1" /></I><I V_ID="1" S_ID="1">本府</I><I V_ID="1" S_ID="1">■■■</I><I V_ID="1" S_ID="1">年</I><I V_ID="1" S_ID="1">■■</I><I V_ID="1" S_ID="1">月</I><I V_ID="1" S_ID="1">■■</I><I V_ID="1" S_ID="1">日現場會勘紀錄。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="4" NS_ID="1" NS_LVL="2" NS_NO="2" /></I><I V_ID="1" S_ID="1">本府</I><I V_ID="1" S_ID="1">■■■</I><I V_ID="1" S_ID="1">年</I><I V_ID="1" S_ID="1">■■</I><I V_ID="1" S_ID="1">月</I><I V_ID="1" S_ID="1">■■</I><I V_ID="1" S_ID="1">日現場相片。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="4" NS_ID="1" NS_LVL="2" NS_NO="3" /></I><I V_ID="1" S_ID="1">新北市</I><I V_ID="1" S_ID="1">■■區■■段■■小段■■■</I><I V_ID="1" S_ID="1">地號土地建物查詢資料。</I><I V_ID="1" S_ID="1"><LINEBREAK PS_ID="4" NS_ID="1" NS_LVL="2" NS_NO="4" /></I><I V_ID="1" S_ID="1">案由：</I><I V_ID="1" S_ID="1">■■■</I><I V_ID="1" S_ID="1">號函。</I></FIELD><FIELD NAME="年度號"><I V_ID="1">111</I></FIELD><FIELD NAME="全銜"><I V_ID="1">新北市政府</I></FIELD><FIELD NAME="地址"><I V_ID="1">220242新北市板橋區中山路1段161號22樓</I></FIELD><FIELD NAME="承辦人資訊"><I V_ID="1">承辦人：李岳樺
+電話：(02)29603456 分機2971
+傳真：(02)22724684
+電子信箱：AA5850@ms.ntpc.gov.tw</I></FIELD><FIELD NAME="發文字號"><I V_ID="1"></I></FIELD><FIELD NAME="檔號"><I V_ID="1">07040401<C CODE="332665" /></I></FIELD><FIELD NAME="案次號"><I V_ID="1">1</I></FIELD><FIELD NAME="保存年限"><I V_ID="1">15</I></FIELD><FIELD NAME="附件用印備註"><I V_ID="1"></I></FIELD><FIELD NAME="決行層級2"><I V_ID="1">二<C CODE="2" /></I></FIELD><FIELD NAME="決行層級1"><I V_ID="1">二<C CODE="2" /></I></FIELD><FIELD NAME="決行者簽名或蓋章"><I V_ID="1"></I></FIELD><FIELD NAME="會辦單位1"><I V_ID="1"></I></FIELD><FIELD NAME="會辦單位2"><I V_ID="1"></I></FIELD><FIELD NAME="會辦單位3"><I V_ID="1"></I></FIELD><FIELD NAME="分層負責"><I V_ID="1">本案依分層負責規定授權農業局局長決行</I></FIELD><FIELD NAME="署名"><I V_ID="1"></I></FIELD><FIELD NAME="副本"><I V_ID="1"></I></FIELD><FIELD NAME="正本"><I V_ID="1">臺灣■■地方檢察署</I></FIELD><FIELD NAME="附件"><I V_ID="1">如說明五</I></FIELD><FIELD NAME="密等及解密條件或保密期限"><I V_ID="1"><C CODE="1" /></I></FIELD><FIELD NAME="速別"><I V_ID="1">普通件<C CODE="1" /></I></FIELD><FIELD NAME="有實體"><I V_ID="1">□受文者為民眾或附件有實體<C CODE="N" /></I></FIELD><FIELD NAME="其他備註2"><I V_ID="1"><C CODE="0" /></I></FIELD><FIELD NAME="發文日期"><I V_ID="1"></I></FIELD><FIELD NAME="其他備註1"><I V_ID="1"></I></FIELD><FIELD NAME="受文者"><I V_ID="1"></I></FIELD><FIELD NAME="傳送方式"><I V_ID="1"></I></FIELD><FIELD NAME="擬辦方式"><I V_ID="1">簽稿併陳<C CODE="3" /></I></FIELD><FIELD NAME="已電子交換章戳"><I V_ID="1"></I></FIELD></BODY>
+  <FLOATING />
+  <ATTACHMENTS></ATTACHMENTS>
+  <ADDITIONAL>
+    <RECEIVERS SEPARATE_TYPE="一文多發">
+      <R KIND="1" NAME="臺灣■■地方檢察署" CODE="" ICODE="" OUT_TYPE="P1" ZIP="" ADDR="111" ATT="NONE" MAIL="" TYPE="O" SEPARATE="FALSE">臺灣■■地方檢察署</R>
+    </RECEIVERS>
+  </ADDITIONAL>
+</SPEED23_DATA>
