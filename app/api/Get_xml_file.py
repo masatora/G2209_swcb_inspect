@@ -1,17 +1,17 @@
 from __init__ import web
 from sanic.views import HTTPMethodView
-from sanic.response import file, json
+from sanic.response import text, json
 from psycopg2 import connect, DatabaseError
 from psycopg2.extras import RealDictCursor
-from json import loads, dumps
+from json import loads
 from os.path import exists, join
 
 class Get_xml_file(HTTPMethodView):
   async def post(self, request):
     try:
       resp = {}
-      file_name = request.json.get('file_name')
-      case_id = request.json.get('case_id')
+      case_id = request.json.get('caseId')
+      file_name = request.json.get('fileName')
 
       with connect(**loads(web.config['DATABASE_CONFIG_INSPECT'])) as conn:
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
@@ -37,7 +37,7 @@ class Get_xml_file(HTTPMethodView):
       assert exists(filepath), '檔案不存在'
 
       with open(filepath, encoding="utf-8") as xml:
-        x = xml.read().format(args={
+        xml_content = xml.read().format(args={
           '案由': row['案由'],
           '違規類別': row['違規類別'],
           '輔導類別': row['輔導類別'],
@@ -70,8 +70,10 @@ class Get_xml_file(HTTPMethodView):
           '修改時間': row['修改時間'],
           '建立時間': row['建立時間']
         })
-        print(x)
     except AssertionError as e:
+      err_str = str(e)
+      resp = { 'status': 'fail', 'msg': err_str }
+    except DatabaseError as e:
       err_str = str(e)
       resp = { 'status': 'fail', 'msg': err_str }
     except Exception as e:
@@ -85,4 +87,4 @@ class Get_xml_file(HTTPMethodView):
       if len(resp) > 0:
         return json(resp, ensure_ascii=False)
       else:
-        return await file(filepath, mime_type="application/xml")
+        return text(xml_content, content_type="application/xml")

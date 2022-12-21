@@ -46,7 +46,7 @@
             </q-btn>
             <q-btn-dropdown icon="file_download" color="primary" size="12px" dense>
               <q-list>
-                <q-item v-for="_paper, i of paper" :key="i" v-close-popup @click="onItemClick" clickable bordered>
+                <q-item v-for="_paper, i of paper" :key="i" v-close-popup @click="getXmlFile(value['案件編號'], `${_paper.type}(${_paper.data})`)" clickable bordered>
                   <q-item-section>
                     <div class="border-gray-500">
                       <q-item-label>{{ _paper.type }}</q-item-label>
@@ -76,8 +76,7 @@
             </q-btn>
           </div>
         </q-card-section>
-        <q-separator />
-        <q-card-section class="p-0">
+        <q-card-section class="w-full h-full p-0 border-2">
           <div class="w-full h-full">
             <canvas id="canvas" class="w-full h-full" />
           </div>
@@ -155,6 +154,24 @@ export default defineComponent({
         const r = signature.getPNG()
         inspectCaseList.value[canvasTargetKey.value]['行為人簽名'] = r
         alert('已儲存簽名檔')
+      },
+      async getXmlFile (caseId, fileName) {
+        try {
+          const response = await axios.post(process.env.API_URL + '/get_xml_file', { caseId, fileName })
+
+          if (response.data !== undefined && response.data !== '') {
+            const link = document.createElement('a')
+            link.href = window.URL.createObjectURL(new Blob([response.data], { type: 'text/plain' }))
+            link.setAttribute('target', '_blank')
+            link.setAttribute('download', fileName + '.xml')
+            link.click()
+            link.remove()
+          } else {
+            throw new Error(response.data.msg)
+          }
+        } catch (err) {
+          alert(String(err))
+        }
       }
     }
   }
