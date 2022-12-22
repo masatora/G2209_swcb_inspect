@@ -3,16 +3,19 @@ from sanic.views import HTTPMethodView
 from sanic.response import text, json
 from psycopg2 import connect, DatabaseError
 from psycopg2.extras import RealDictCursor
-from json import loads
 from os.path import exists, join
+from json import loads
 
 class Get_xml_file(HTTPMethodView):
   async def post(self, request):
     try:
       resp = {}
-      case_id = request.json.get('caseId')
-      file_name = request.json.get('fileName')
-      assert type(case_id) is int and case_id > 0, '案件編號格式錯誤'
+      xml_content = ''
+      print(request.content_type)
+
+      case_id = request.form.get('caseId')
+      file_name = request.form.get('fileName')
+      assert type(case_id) is str and int(case_id) > 0, '案件編號格式錯誤'
       assert type(file_name) is str and file_name != '', '檔名格式錯誤'
 
       with connect(**loads(web.config['DATABASE_CONFIG_INSPECT'])) as conn:

@@ -293,7 +293,7 @@ import Proj4 from 'proj4'
 import jsonToFormData from 'json-form-data'
 
 export default defineComponent({
-  name: 'MainLayout',
+  name: 'AddInspectCase',
   components: {
   },
   setup () {

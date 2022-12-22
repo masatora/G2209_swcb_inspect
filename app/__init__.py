@@ -8,4 +8,4 @@ import api
 
 Extend(web)
 
-print(web.router.routes_all)
+# print(web.router.routes_all)

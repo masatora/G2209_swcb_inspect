@@ -5,8 +5,8 @@ const routes = [
     component: () => import('layouts/InspectCaseList.vue')
   },
   {
-    path: '/form',
-    component: () => import('layouts/MainLayout.vue')
+    path: '/add',
+    component: () => import('layouts/AddInspectCase.vue')
   },
 
   // Always leave this as last one,

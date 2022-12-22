@@ -5,7 +5,7 @@
       <q-item>
         <q-item-section />
         <q-item-section side>
-          <q-btn color="primary" icon="post_add" @click="router.push({ path: '/form' })" label="新增表單" />
+          <q-btn color="primary" icon="post_add" @click="router.push({ path: '/add' })" label="新增表單" />
         </q-item-section>
       </q-item>
       <q-item class="bg-primary text-lg text-white text-bold text-center">
@@ -157,9 +157,12 @@ export default defineComponent({
       },
       async getXmlFile (caseId, fileName) {
         try {
-          const response = await axios.post(process.env.API_URL + '/get_xml_file', { caseId, fileName })
+          const formData = new FormData()
+          formData.append('caseId', caseId)
+          formData.append('fileName', fileName)
+          const response = await axios.post(process.env.API_URL + '/get_xml_file', formData)
 
-          if (response.data !== undefined && response.data !== '') {
+          if (response.data.msg === undefined && typeof response.data === 'string') {
             const link = document.createElement('a')
             link.href = window.URL.createObjectURL(new Blob([response.data], { type: 'text/plain' }))
             link.setAttribute('target', '_blank')
