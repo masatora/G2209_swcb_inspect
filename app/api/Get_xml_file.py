@@ -12,6 +12,8 @@ class Get_xml_file(HTTPMethodView):
       resp = {}
       case_id = request.json.get('caseId')
       file_name = request.json.get('fileName')
+      assert type(case_id) is int and case_id > 0, '案件編號格式錯誤'
+      assert type(file_name) is str and file_name != '', '檔名格式錯誤'
 
       with connect(**loads(web.config['DATABASE_CONFIG_INSPECT'])) as conn:
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
