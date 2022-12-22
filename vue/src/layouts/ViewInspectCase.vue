@@ -83,7 +83,7 @@
         <q-card>
           <q-card-section>
             <div>
-              <div class="grid grid-cols-[0.4fr,0.9fr,0.1fr] gap-5 flex items-center py-2">
+              <div class="grid grid-cols-[0.4fr,1fr] gap-2 flex items-center py-2">
                 <span>定位座標(TWD97)</span>
                 <span class="grid grid-cols-[1fr,1fr] gap-5 px-2">
                   <span>
@@ -92,9 +92,6 @@
                   <span>
                     <q-input v-model="inspectRecord['TWD97_Y']" label="請輸入Y座標" filled dense />
                   </span>
-                </span>
-                <span>
-                  <q-btn icon="pin_drop" color="grey-3" class="text-grey-7" @click="wgs84ToTwd97()" dense />
                 </span>
               </div>
             </div>
@@ -124,8 +121,8 @@
               <div class="grid grid-cols-[0.4fr,1fr] gap-5 flex items-center py-2">
                 <span>{{ _infoPerson.name }}</span>
                 <span>
-                  <template v-if="_infoPerson.type === 'input_date'">
-                    <q-input v-model="inspectRecord[_infoPerson.name]" :label=_infoPerson.label mask="####-##-##" fill-mask filled dense />
+                  <template v-if="_infoPerson.type === 'select'">
+                    <q-select v-model="inspectRecord[_infoPerson.name]" :options="_infoPerson.data" :label=_infoPerson.label filled dense />
                   </template>
                   <template v-else>
                     <q-input v-model="inspectRecord[_infoPerson.name]" :label=_infoPerson.label filled dense />
@@ -289,11 +286,9 @@ import { useRouter } from 'vue-router'
 import { forEach, forEachObjIndexed } from 'ramda'
 import SmoothSignature from 'smooth-signature'
 import axios from 'axios'
-import Proj4 from 'proj4'
-import jsonToFormData from 'json-form-data'
 
 export default defineComponent({
-  name: 'AddInspectCase',
+  name: 'ViewInspectCase',
   components: {
   },
   setup () {
@@ -346,53 +341,6 @@ export default defineComponent({
         }
       })
     }
-    const toFormData = (obj) => {
-      return jsonToFormData(obj, {
-        initialFormData: new FormData(),
-        showLeafArrayIndexes: true,
-        includeNullValues: false,
-        mapping: function (value) {
-          if (typeof value === 'boolean') {
-            return +value ? '1' : '0'
-          }
-          return value
-        }
-      })
-    }
-    const getObjData = () => {
-      const result = {}
-      try {
-        forEachObjIndexed((v, k) => {
-          if (v.value !== undefined) {
-            if (['行政區', '地段'].includes(k)) {
-              result[k] = v.label
-            } else {
-              result[k] = v.value
-              result[k + '簽名'] = v.sign
-            }
-          } else {
-            if (k === '現場照片') {
-              if (v.length <= 8) {
-                result[k] = v
-              } else {
-                throw new Error(k + '最多可上傳 8 張')
-              }
-            } else {
-              if (!['其他1', '其他2', '其他違規項目', '其他會勘結論'].includes(k)) {
-                if (v !== '') {
-                  result[k] = v
-                } else {
-                  throw new Error(k + '不可為空值')
-                }
-              }
-            }
-          }
-        })(inspectRecord.value)
-      } catch (err) {
-        alert(err)
-      }
-      return result
-    }
     const getRegion = async () => {
       try {
         const response = await axios.get(process.env.API_URL + '/get_region')
@@ -429,14 +377,45 @@ export default defineComponent({
         alert(String(err))
       }
     }
+    const getInspectCase = async () => {
+      try {
+        const formData = new FormData()
+        formData.append('caseId', router.currentRoute.value.params.caseId)
+        const response = await axios.post(process.env.API_URL + '/get_inspect_case', formData)
 
-    Proj4.defs([
-      ['EPSG:4326', '+title=WGS84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'],
-      ['EPSG:3826', '+title=TWD97 TM2 +proj=tmerc +lat_0=0 +lon_0=121 +k=0.9999 +x_0=250000 +y_0=0 +ellps=GRS80 +units=m +no_defs']
-    ])
+        if (response.data.status === 'success') {
+          forEachObjIndexed((value, key) => {
+            if (key === '土地基本資料') {
+              forEachObjIndexed((v, k) => {
+                inspectRecord.value[k] = v
+              })(value)
+            } else if (key === '會勘單位與人員') {
+              forEachObjIndexed((v, k) => {
+                if (k.indexOf('簽名') > 0) {
+                  inspectRecord.value[k.replace('簽名', '')].sign = v
+                } else {
+                  inspectRecord.value[k].value = v
+                }
+              })(value)
+            } else if (key === '行為人基本資料') {
+              forEachObjIndexed((v, k) => {
+                inspectRecord.value[k] = v
+              })(value)
+            } else {
+              inspectRecord.value[key] = value
+            }
+          })(response.data.row)
+        } else {
+          throw new Error(response.data.msg)
+        }
+      } catch (err) {
+        alert(String(err))
+      }
+    }
 
     onMounted(() => {
       getRegion()
+      getInspectCase()
       const canvas = document.getElementById('canvas')
       signature = new SmoothSignature(canvas, {
         scale: 4,
@@ -468,33 +447,6 @@ export default defineComponent({
         })(inspectRecord.value[name].sign)
 
         inspectRecord.value[name].sign = sign
-      },
-      wgs84ToTwd97 () {
-        const EPSG3826 = new Proj4.Proj('EPSG:3826')
-        const EPSG4326 = new Proj4.Proj('EPSG:4326')
-
-        navigator.geolocation.getCurrentPosition(pos => {
-          const coords = Proj4(EPSG4326, EPSG3826, [pos.coords.longitude, pos.coords.latitude])
-          inspectRecord.value.TWD97_X = coords[0]
-          inspectRecord.value.TWD97_Y = coords[1]
-        })
-      },
-      async createInspectCase () {
-        try {
-          const data = getObjData()
-          if (Object.keys(data).length > 0) {
-            const formData = toFormData(data)
-            const response = await axios.post(process.env.API_URL + '/create_inspect_case', formData)
-            if (response.data.status === 'success') {
-              alert('新增會勘案件成功')
-              router.push({ path: '/' })
-            } else {
-              throw new Error(response.data.msg)
-            }
-          }
-        } catch (err) {
-          alert(String(err))
-        }
       },
       async getBase64Img (element) {
         inspectRecord.value['現場照片'].push(await imgToBase64(element[0]))

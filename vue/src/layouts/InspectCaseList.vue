@@ -41,7 +41,7 @@
         <q-item-section>{{ value['更新時間'] }}</q-item-section>
         <q-item-section>
           <div class="flex justify-evenly">
-            <q-btn icon="description" color="grey-7" flat round dense>
+            <q-btn icon="description" color="grey-7" @click="router.push({ path: '/view/' + value['案件編號'] })" flat round dense>
               <q-tooltip>詳細內容</q-tooltip>
             </q-btn>
             <q-btn-dropdown icon="file_download" color="primary" size="12px" dense>

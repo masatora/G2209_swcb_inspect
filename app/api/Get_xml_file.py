@@ -11,7 +11,6 @@ class Get_xml_file(HTTPMethodView):
     try:
       resp = {}
       xml_content = ''
-      print(request.content_type)
 
       case_id = request.form.get('caseId')
       file_name = request.form.get('fileName')

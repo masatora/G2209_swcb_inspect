@@ -15,7 +15,7 @@ export const info = [
   { name: '所有權人', type: 'input', label: '請輸入所有權人姓名' }]
 export const infoPerson = [
   { name: '行為人姓名', type: 'input', label: '請輸入行為人姓名' },
-  { name: '行為人出生年月日', type: 'input', label: '請輸入行為人出生年月日' },
+  { name: '行為人出生年月日', type: 'input_date', label: '請輸入行為人出生年月日' },
   { name: '行為人身分證', type: 'input', label: '請輸入行為人身分證' },
   { name: '行為人電話', type: 'input', label: '請輸入行為人電話' },
   { name: '行為人住址', type: 'input', label: '請輸入行為人住址' }]
