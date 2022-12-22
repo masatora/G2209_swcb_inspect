@@ -58,7 +58,7 @@
                   </template>
                 </span>
                 <span>
-                  <q-btn icon="edit" color="grey-3" class="text-grey-7" @click="isShowCanvas = !isShowCanvas; signTargetName = _attendees.name" dense />
+                  <q-btn icon="draw" color="grey-3" class="text-grey-7" @click="isShowCanvas = !isShowCanvas; signTargetName = _attendees.name" dense />
                 </span>
               </div>
               <div class="py-3" v-if="inspectRecord[_attendees.name].sign.length > 0">
@@ -265,7 +265,7 @@
               <q-tooltip>清空畫布</q-tooltip>
             </q-btn>
             <q-btn icon="undo" size="lg" flat dense @click="undoCanvas()">
-              <q-tooltip>上一動</q-tooltip>
+              <q-tooltip>上一步</q-tooltip>
             </q-btn>
             <q-btn icon="save_as" size="lg" flat dense @click="saveCanvas(); clearCanvas()">
               <q-tooltip>儲存</q-tooltip>
@@ -294,8 +294,6 @@ import jsonToFormData from 'json-form-data'
 
 export default defineComponent({
   name: 'AddInspectCase',
-  components: {
-  },
   setup () {
     let signature
     const router = useRouter()
@@ -444,6 +442,16 @@ export default defineComponent({
         bgColor: '#FFFFFF'
       })
       isShowCanvas.value = false
+
+      if ('onorientationchange' in window) {
+        window.onorientationchange = (e) => {
+          signature.getRotateCanvas(90)
+        }
+      } else if ('screen' in window && 'orientation' in window.screen) {
+        window.screen.orientation.addEventListener('change', (e) => {
+          signature.getRotateCanvas(90)
+        }, false)
+      }
     })
 
     return {
@@ -500,7 +508,7 @@ export default defineComponent({
         inspectRecord.value['現場照片'].push(await imgToBase64(element[0]))
       },
       cancel () {
-        if (confirm('請確認是否要離開編輯表單頁面，您所填列的資料不會保存')) {
+        if (confirm('請確認是否要離開新增表單頁面，您所填列的資料不會保存')) {
           router.push({ path: '/' })
         }
       },

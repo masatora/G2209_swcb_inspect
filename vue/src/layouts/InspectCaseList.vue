@@ -69,7 +69,7 @@
               <q-tooltip>清空畫布</q-tooltip>
             </q-btn>
             <q-btn icon="undo" size="lg" flat dense @click="undoCanvas()">
-              <q-tooltip>上一動</q-tooltip>
+              <q-tooltip>上一步</q-tooltip>
             </q-btn>
             <q-btn icon="save_as" size="lg" flat dense @click="saveCanvas(); clearCanvas()">
               <q-tooltip>儲存</q-tooltip>
@@ -98,12 +98,9 @@ import { useRouter } from 'vue-router'
 import { paper } from './data'
 import axios from 'axios'
 import SmoothSignature from 'smooth-signature'
-// import { forEachObjIndexed } from 'ramda'
 
 export default defineComponent({
   name: 'InspectCaseList',
-  components: {
-  },
   setup () {
     const router = useRouter()
     const inspectCaseList = ref({})
@@ -134,6 +131,16 @@ export default defineComponent({
         bgColor: '#FFFFFF'
       })
       isShowCanvas.value = false
+
+      if ('onorientationchange' in window) {
+        window.onorientationchange = (e) => {
+          signature.getRotateCanvas(90)
+        }
+      } else if ('screen' in window && 'orientation' in window.screen) {
+        window.screen.orientation.addEventListener('change', (e) => {
+          signature.getRotateCanvas(90)
+        }, false)
+      }
     })
 
     return {

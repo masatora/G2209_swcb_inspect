@@ -58,7 +58,7 @@
                   </template>
                 </span>
                 <span>
-                  <q-btn icon="edit" color="grey-3" class="text-grey-7" @click="isShowCanvas = !isShowCanvas; signTargetName = _attendees.name" dense />
+                  <q-btn icon="draw" color="grey-3" class="text-grey-7" @click="isShowCanvas = !isShowCanvas; signTargetName = _attendees.name" dense />
                 </span>
               </div>
               <div class="py-3" v-if="inspectRecord[_attendees.name].sign.length > 0">
@@ -83,13 +83,13 @@
         <q-card>
           <q-card-section>
             <div>
-              <div class="grid grid-cols-[0.4fr,1fr] gap-2 flex items-center py-2">
+              <div class="grid grid-cols-[0.4fr,1fr] gap-5 flex items-center py-2">
                 <span>定位座標(TWD97)</span>
-                <span class="grid grid-cols-[1fr,1fr] gap-5 px-2">
-                  <span>
+                <span class="row">
+                  <span class="col pr-2">
                     <q-input v-model="inspectRecord['TWD97_X']" label="請輸入X座標" filled dense />
                   </span>
-                  <span>
+                  <span class="col pl-2">
                     <q-input v-model="inspectRecord['TWD97_Y']" label="請輸入Y座標" filled dense />
                   </span>
                 </span>
@@ -246,10 +246,9 @@
           </div>
         </div>
       </q-item>
-      <q-item class="grid">
-        <div class="q-pa-md q-gutter-sm justify-self-end">
-          <q-btn color="negative" icon="delete" @click.prevent="cancel" label="取消" />
-          <q-btn color="primary" icon="send" @click="createInspectCase()" label="確認送出" />
+      <q-item>
+        <div class="w-full q-py-md flex justify-end">
+          <q-btn color="grey" icon="undo" @click="cancel()" label="返回" />
         </div>
       </q-item>
     </q-list>
@@ -262,7 +261,7 @@
               <q-tooltip>清空畫布</q-tooltip>
             </q-btn>
             <q-btn icon="undo" size="lg" flat dense @click="undoCanvas()">
-              <q-tooltip>上一動</q-tooltip>
+              <q-tooltip>上一步</q-tooltip>
             </q-btn>
             <q-btn icon="save_as" size="lg" flat dense @click="saveCanvas(); clearCanvas()">
               <q-tooltip>儲存</q-tooltip>
@@ -286,11 +285,10 @@ import { useRouter } from 'vue-router'
 import { forEach, forEachObjIndexed } from 'ramda'
 import SmoothSignature from 'smooth-signature'
 import axios from 'axios'
+import jsonToFormData from 'json-form-data'
 
 export default defineComponent({
   name: 'ViewInspectCase',
-  components: {
-  },
   setup () {
     let signature
     const router = useRouter()
@@ -412,6 +410,53 @@ export default defineComponent({
         alert(String(err))
       }
     }
+    const toFormData = (obj) => {
+      return jsonToFormData(obj, {
+        initialFormData: new FormData(),
+        showLeafArrayIndexes: true,
+        includeNullValues: false,
+        mapping: function (value) {
+          if (typeof value === 'boolean') {
+            return +value ? '1' : '0'
+          }
+          return value
+        }
+      })
+    }
+    const getObjData = () => {
+      const result = {}
+      try {
+        forEachObjIndexed((v, k) => {
+          if (v.value !== undefined) {
+            if (['行政區', '地段'].includes(k)) {
+              result[k] = v.label
+            } else {
+              result[k] = v.value
+              result[k + '簽名'] = v.sign
+            }
+          } else {
+            if (k === '現場照片') {
+              if (v.length <= 8) {
+                result[k] = v
+              } else {
+                throw new Error(k + '最多可上傳 8 張')
+              }
+            } else {
+              if (!['其他1', '其他2', '其他違規項目', '其他會勘結論'].includes(k)) {
+                if (v !== '') {
+                  result[k] = v
+                } else {
+                  throw new Error(k + '不可為空值')
+                }
+              }
+            }
+          }
+        })(inspectRecord.value)
+      } catch (err) {
+        alert(err)
+      }
+      return result
+    }
 
     onMounted(() => {
       getRegion()
@@ -423,6 +468,16 @@ export default defineComponent({
         bgColor: '#FFFFFF'
       })
       isShowCanvas.value = false
+
+      if ('onorientationchange' in window) {
+        window.onorientationchange = (e) => {
+          signature.getRotateCanvas(90)
+        }
+      } else if ('screen' in window && 'orientation' in window.screen) {
+        window.screen.orientation.addEventListener('change', (e) => {
+          signature.getRotateCanvas(90)
+        }, false)
+      }
     })
 
     return {
@@ -447,6 +502,22 @@ export default defineComponent({
         })(inspectRecord.value[name].sign)
 
         inspectRecord.value[name].sign = sign
+      },
+      async updateInspectCase () {
+        try {
+          const data = getObjData()
+          if (Object.keys(data).length > 0) {
+            const formData = toFormData(data)
+            const response = await axios.post(process.env.API_URL + '/update_inspect_case', formData)
+            if (response.data.status === 'success') {
+              alert(response.data.msg)
+            } else {
+              throw new Error(response.data.msg)
+            }
+          }
+        } catch (err) {
+          alert(String(err))
+        }
       },
       async getBase64Img (element) {
         inspectRecord.value['現場照片'].push(await imgToBase64(element[0]))

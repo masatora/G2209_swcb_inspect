@@ -9,6 +9,8 @@ from json import loads
 class Get_xml_file(HTTPMethodView):
   async def post(self, request):
     try:
+      assert request.content_type.find('multipart/form-data') != -1, '無法處理的 request'
+
       resp = {}
       xml_content = ''
 

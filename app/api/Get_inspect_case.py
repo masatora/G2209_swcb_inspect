@@ -10,8 +10,9 @@ from re import sub
 class Get_inspect_case(HTTPMethodView):
   async def post(self, request):
     try:
-      resp = {}
+      assert request.content_type.find('multipart/form-data') != -1, '無法處理的 request'
 
+      resp = {}
       case_id = request.form.get('caseId')
       assert type(case_id) is str and int(case_id) > 0, '案件編號格式錯誤'
 
