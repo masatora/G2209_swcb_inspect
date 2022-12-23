@@ -2,37 +2,36 @@ from __init__ import web
 from sanic.views import HTTPMethodView
 from sanic.response import json
 from psycopg2 import connect, DatabaseError
-from psycopg2.extras import RealDictCursor
 from datetime import datetime
-from json import loads, dumps
-from re import sub
+from json import loads
 
-class Get_inspect_case(HTTPMethodView):
+class Update_perpetrator_sign(HTTPMethodView):
   async def post(self, request):
     try:
       assert request.content_type.find('multipart/form-data') != -1, '無法處理的 request'
+      assert len(request.form) > 0, '參數錯誤'
 
       resp = {}
       case_id = request.form.get('caseId')
+      perpetrator_sign = request.form.get('perpetratorSign')
+      print(case_id)
       assert type(case_id) is str and int(case_id) > 0, '案件編號格式錯誤'
 
       with connect(**loads(web.config['DATABASE_CONFIG_INSPECT'])) as conn:
-        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+        with conn.cursor() as cursor:
+          now = datetime.now()
           cursor.execute('''
-            SELECT
-              案由, 會勘單位與人員, 土地基本資料, 行為人基本資料, 違規類別, 輔導類別, 各單位意見, 行為人意見, 會勘結論, 散會, 現場照片, 填寫人,
-              TO_CHAR(時間, 'YYYY-MM-DD HH24:MI') AS 時間,
-              TO_CHAR(散會, 'YYYY-MM-DD HH24:MI') AS 散會
-            FROM hillside_inspect
-            WHERE 案件編號 = %(case_id)s
-            ORDER BY 建立時間 DESC, 修改時間 DESC, 案件編號 DESC
+            UPDATE hillside_inspect
+            SET 行為人簽名 = %(行為人簽名)s, 修改時間 = %(修改時間)s
+            WHERE 案件編號 = %(案件編號)s
           ''', {
-            'case_id': case_id
+            '案件編號': case_id,
+            '行為人簽名': perpetrator_sign,
+            '修改時間': now,
           })
-          assert cursor.rowcount > 0, '無相關會勘紀錄表資料'
-          row = cursor.fetchone()
+          assert cursor.rowcount == 1, '更新行為人簽名失敗'
 
-      resp = { 'status': 'success', 'msg': 'OK', 'row': row }
+      resp = { 'status': 'success', 'msg': '更新行為人簽名成功' }
     except AssertionError as e:
       err_str = str(e)
       resp = { 'status': 'fail', 'msg': err_str }
@@ -41,7 +40,7 @@ class Get_inspect_case(HTTPMethodView):
       resp = { 'status': 'fail', 'msg': err_str }
     except Exception as e:
       err_str = str(e)
-      resp = { 'status': 'fail', 'msg': '取得會勘紀錄表 API 暫時無法服務' }
+      resp = { 'status': 'fail', 'msg': '更新行為人簽名 API 暫時無法服務' }
     finally:
       if 'err_str' in locals():
         if web.config['DEBUG']:

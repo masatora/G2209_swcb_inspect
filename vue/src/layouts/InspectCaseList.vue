@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full">
-    <q-list class="h-full xl:px-90 lg:px-40 md:px-20">
+    <q-list class="h-full xl:px-90 lg:px-30 md:px-10">
       <q-item-label class='text-2xl text-center text-bold p-3'>新北市政府農業局違規使用山坡地案件現場會勘紀錄表</q-item-label>
       <q-item>
         <q-item-section />
@@ -23,9 +23,9 @@
         <q-item-section>{{ value['案由'] }}</q-item-section>
         <q-item-section>{{ value['行政區'] }}</q-item-section>
         <q-item-section>
-          <div class="grid grid-cols-[1fr,1fr,1fr] flex justify-center items-center">
+          <div class="flex justify-between items-center">
             <span>
-              <q-btn icon="draw" color="grey-7" @click="isShowCanvas = true; canvasTargetKey = key" flat round dense>
+              <q-btn icon="draw" color="grey-7" @click="isShowCanvas = true; caseId = value['案件編號']; canvasTargetKey = key" flat round dense>
                 <q-tooltip>請行為人簽名確認</q-tooltip>
               </q-btn>
             </span>
@@ -61,8 +61,8 @@
       </q-item>
     </q-list>
     <div class="canvasContainer" v-show="isShowCanvas">
-      <q-card class="xl:(w-1/2 h-1/2) lg:(w-2/3 h-2/3) md:(w-3/4 h-1/2) grid grid-rows-[0.1fr,1.9fr]">
-        <q-btn class="absolute top-1 right-1 z-3" icon="close" flat rounded dense @click="isShowCanvas = false; signTargetName = ''; clearCanvas()" />
+      <q-card class="xl:(w-1/2 h-1/2) lg:(w-3/4 h-3/4) md:(w-3/4 h-1/2) grid grid-rows-[0.1fr,1.9fr]">
+        <q-btn class="absolute top-1 right-1 z-3" icon="close" flat rounded dense @click="isShowCanvas = false; caseId = ''; signTargetName = ''; clearCanvas()" />
         <q-card-section class="p-0">
           <div class="flex justify-evenly px-3 py-1">
             <q-btn icon="auto_fix_off" size="lg" flat dense @click="clearCanvas()">
@@ -116,7 +116,25 @@ export default defineComponent({
         alert(String(err))
       }
     }
+    const updatePerpetratorSign = async (sign) => {
+      try {
+        const formData = new FormData()
+        console.log(caseId)
+        formData.append('caseId', caseId.value)
+        formData.append('perpetratorSign', sign)
+        const response = await axios.post(process.env.API_URL + '/update_perpetrator_sign', formData)
+
+        if (response.data.status === 'success') {
+          alert(response.data.msg)
+        } else {
+          throw new Error(response.data.msg)
+        }
+      } catch (err) {
+        alert(String(err))
+      }
+    }
     let signature
+    const caseId = ref('')
     const isShowCanvas = ref(true)
     const isShowSign = ref(false)
     const signSrc = ref('')
@@ -127,6 +145,7 @@ export default defineComponent({
       const canvas = document.getElementById('canvas')
       signature = new SmoothSignature(canvas, {
         scale: 4,
+        maxWidth: 10,
         color: '#000000',
         bgColor: '#FFFFFF'
       })
@@ -134,16 +153,26 @@ export default defineComponent({
 
       if ('onorientationchange' in window) {
         window.onorientationchange = (e) => {
-          signature.getRotateCanvas(90)
+          // const w = window.innerWidth, h = window.innerHeight
+
+          // if (w > h) {
+          //   canvas.style.width = String(Math.ceil(w / 4) * 3) + 'px'
+          //   canvas.style.height = String(Math.ceil(h / 4) * 3) + 'px'
+          // } else {
+          //   canvas.style.width = String(Math.ceil(w / 4) * 3) + 'px'
+          //   canvas.style.height = String(Math.ceil(h / 4) * 1) + 'px'
+          // }
         }
       } else if ('screen' in window && 'orientation' in window.screen) {
         window.screen.orientation.addEventListener('change', (e) => {
-          signature.getRotateCanvas(90)
+          canvas.style.width = String(Math.floor(window.innerWidth / 4) * 3) + 'px'
+          canvas.style.height = String(Math.floor(window.innerHeight / 4) * 3) + 'px'
         }, false)
       }
     })
 
     return {
+      caseId,
       paper,
       router,
       inspectCaseList,
@@ -160,7 +189,7 @@ export default defineComponent({
       saveCanvas () {
         const r = signature.getPNG()
         inspectCaseList.value[canvasTargetKey.value]['行為人簽名'] = r
-        alert('已儲存簽名檔')
+        updatePerpetratorSign(r)
       },
       async getXmlFile (caseId, fileName) {
         try {

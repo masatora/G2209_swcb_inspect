@@ -257,7 +257,7 @@
       </q-item>
     </q-list>
     <div class="canvasContainer" v-show="isShowCanvas">
-      <q-card class="xl:(w-1/2 h-1/2) lg:(w-2/3 h-2/3) md:(w-3/4 h-1/2) grid grid-rows-[0.1fr,1.9fr]">
+      <q-card class="xl:(w-1/2 h-1/2) lg:(w-3/4 h-3/4) md:(w-3/4 h-1/2) grid grid-rows-[0.1fr,1.9fr]">
         <q-btn class="absolute top-1 right-1 z-3" icon="close" flat rounded dense @click="isShowCanvas = false; signTargetName = ''; clearCanvas()" />
         <q-card-section class="p-0 m-0">
           <div class="flex justify-evenly px-3 py-1">

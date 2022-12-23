@@ -246,14 +246,15 @@
           </div>
         </div>
       </q-item>
-      <q-item>
-        <div class="w-full q-py-md flex justify-end">
-          <q-btn color="grey" icon="undo" @click="cancel()" label="返回" />
+      <q-item class="grid">
+        <div class="q-pa-md q-gutter-sm justify-self-end">
+          <q-btn color="negative" icon="delete" @click="cancel()" label="取消" />
+          <q-btn color="primary" icon="send" @click="updateInspectCase()" label="確認修改" />
         </div>
       </q-item>
     </q-list>
     <div class="canvasContainer" v-show="isShowCanvas">
-      <q-card class="xl:(w-1/2 h-1/2) lg:(w-2/3 h-2/3) md:(w-3/4 h-1/2) grid grid-rows-[0.1fr,1.9fr]">
+      <q-card class="xl:(w-1/2 h-1/2) lg:(w-3/4 h-3/4) md:(w-3/4 h-1/2) grid grid-rows-[0.1fr,1.9fr]">
         <q-btn class="absolute top-1 right-1 z-3" icon="close" flat rounded dense @click="isShowCanvas = false; signTargetName = ''; clearCanvas()" />
         <q-card-section class="p-0 m-0">
           <div class="flex justify-evenly px-3 py-1">
@@ -427,6 +428,7 @@ export default defineComponent({
       const result = {}
       try {
         forEachObjIndexed((v, k) => {
+          console.log(v, k)
           if (v.value !== undefined) {
             if (['行政區', '地段'].includes(k)) {
               result[k] = v.label
@@ -508,6 +510,7 @@ export default defineComponent({
           const data = getObjData()
           if (Object.keys(data).length > 0) {
             const formData = toFormData(data)
+            formData.append('案件編號', router.currentRoute.value.params.caseId)
             const response = await axios.post(process.env.API_URL + '/update_inspect_case', formData)
             if (response.data.status === 'success') {
               alert(response.data.msg)
