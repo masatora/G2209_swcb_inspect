@@ -242,10 +242,24 @@
             <span>
               <q-icon name="person" color="grey-7" size="sm" />
             </span>
-            <span class="text-lg text-black text-bold">填寫人: </span>
+            <span class="text-lg text-black text-bold">行為人簽名: </span>
             <span>
-              <q-input v-model="inspectRecord['填寫人']" filled dense/>
+              <q-btn icon="draw" color="grey-3" class="text-grey-7" @click="isShowCanvas = !isShowCanvas; signTargetName = '行為人簽名'" dense />
             </span>
+          </div>
+          <div class="py-3" v-if="inspectRecord['行為人簽名'].sign.length > 0">
+            <q-carousel class="border-2" v-model="inspectRecord['行為人簽名'].slide" ref="carousel" thumbnails infinite swipeable animated>
+              <template v-for="(v, k) in inspectRecord['行為人簽名'].sign" :key="k">
+                <q-carousel-slide :name="k + 1" :img-src="v" />
+              </template>
+              <template v-slot:control>
+                <q-carousel-control position="top-left">
+                  <q-btn class="absolute top-0 left-0" icon="delete" color="negative" @click="deletcSign('行為人簽名', $refs.carousel[0].modelValue)" flat round dense>
+                    <q-tooltip>刪除此簽名</q-tooltip>
+                  </q-btn>
+                </q-carousel-control>
+              </template>
+            </q-carousel>
           </div>
         </div>
       </q-item>
@@ -305,7 +319,9 @@ export default defineComponent({
       案由: '',
       時間: '',
       本市區公所: { value: '', slide: 1, sign: [] },
-      本府局處: { value: '', slide: 1, sign: [] },
+      本府局處1: { value: '', slide: 1, sign: [] },
+      本府局處2: { value: '', slide: 1, sign: [] },
+      本府局處3: { value: '', slide: 1, sign: [] },
       本府地政事務所: { value: '', slide: 1, sign: [] },
       本府警察局: { value: '', slide: 1, sign: [] },
       本府違章建築拆除大隊: { value: '', slide: 1, sign: [] },
@@ -333,7 +349,7 @@ export default defineComponent({
       現場照片: [],
       其他會勘結論: '',
       散會: '',
-      填寫人: ''
+      行為人簽名: { slide: 1, sign: [] }
     })
     const imgToBase64 = (e) => {
       return new Promise((resolve) => {
