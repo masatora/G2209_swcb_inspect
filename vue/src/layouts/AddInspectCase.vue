@@ -145,7 +145,7 @@
             <span class="text-lg text-black text-bold">違規類別(可複選): </span>
             <span class="grid grid-cols-[1fr,1fr] gap-5">
               <span>
-                <q-select v-model="inspectRecord['違規類別']" :options="violationType" label="請選擇違規項目" filled dense />
+                <q-select v-model="inspectRecord['違規類別']" :options="violationType" label="請選擇違規項目" multiple use-chips filled dense />
               </span>
               <span>
                 <q-input v-model="inspectRecord['其他違規項目']" label="請輸入其他違規項目" filled dense />
@@ -186,7 +186,7 @@
             <span class="text-lg text-black text-bold">會勘結論(可複選): </span>
             <span class="grid grid-cols-[1fr,1fr] gap-5">
               <span>
-                <q-select v-model="inspectRecord['會勘結論']" :options="conclusionType" label="請選擇會勘結論項目" filled dense />
+                <q-select v-model="inspectRecord['會勘結論']" :options="conclusionType" label="請選擇會勘結論項目" multiple use-chips filled dense />
               </span>
               <span>
                 <q-input v-model="inspectRecord['其他會勘結論']" label="請輸入其他會勘結論" filled dense />
@@ -340,12 +340,12 @@ export default defineComponent({
       行為人身分證: '',
       行為人電話: '',
       行為人住址: '',
-      違規類別: '',
+      違規類別: [],
       其他違規項目: '',
       輔導類別: false,
       各單位意見: '',
       行為人意見: '',
-      會勘結論: '',
+      會勘結論: [],
       現場照片: [],
       其他會勘結論: '',
       散會: '',
@@ -392,7 +392,9 @@ export default defineComponent({
                 throw new Error(k + '最多可上傳 8 張')
               }
             } else {
-              if (!['其他1', '其他2', '其他違規項目', '其他會勘結論'].includes(k)) {
+              if (['其他1', '其他2', '其他違規項目', '其他會勘結論'].includes(k)) {
+                result[k] = v
+              } else {
                 if (v !== '') {
                   result[k] = v
                 } else {
