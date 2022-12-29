@@ -20,7 +20,7 @@ class Get_inspect_case(HTTPMethodView):
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
           cursor.execute('''
             SELECT
-              案由, 會勘單位與人員, 土地基本資料, 行為人基本資料, 違規類別, 輔導類別, 各單位意見, 行為人意見, 會勘結論, 散會, 現場照片, 填寫人,
+              案由, 會勘單位與人員, 土地基本資料, 行為人基本資料, 違規類別, 輔導類別, 各單位意見, 行為人意見, 會勘結論, 散會, 現場照片,
               TO_CHAR(時間, 'YYYY-MM-DD HH24:MI') AS 時間,
               TO_CHAR(散會, 'YYYY-MM-DD HH24:MI') AS 散會
             FROM hillside_inspect

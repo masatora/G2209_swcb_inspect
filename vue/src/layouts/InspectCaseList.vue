@@ -12,8 +12,7 @@
         <q-item-section>案件時間</q-item-section>
         <q-item-section>案由</q-item-section>
         <q-item-section>行政區</q-item-section>
-        <q-item-section>行為人</q-item-section>
-        <q-item-section>填寫人</q-item-section>
+        <q-item-section>行為人姓名</q-item-section>
         <q-item-section>更新時間</q-item-section>
         <q-item-section>功能列表</q-item-section>
       </q-item>
@@ -22,22 +21,7 @@
         <q-item-section>{{ value['案件時間'] }}</q-item-section>
         <q-item-section>{{ value['案由'] }}</q-item-section>
         <q-item-section>{{ value['行政區'] }}</q-item-section>
-        <q-item-section>
-          <div class="flex justify-between items-center">
-            <span>
-              <q-btn icon="draw" color="grey-7" @click="isShowCanvas = true; caseId = value['案件編號']; canvasTargetKey = key" flat round dense>
-                <q-tooltip>請行為人簽名確認</q-tooltip>
-              </q-btn>
-            </span>
-            <span v-if="value['行為人簽名'] !== null">
-              <q-btn icon="visibility" color="grey-7" @click="isShowSign = true; signSrc = value['行為人簽名']" flat round dense>
-                <q-tooltip>檢視行為人簽名</q-tooltip>
-              </q-btn>
-            </span>
-            <span>{{ value['行為人姓名'] }}</span>
-          </div>
-        </q-item-section>
-        <q-item-section>{{ value['填寫人'] }}</q-item-section>
+        <q-item-section>{{ value['行為人姓名'] }}</q-item-section>
         <q-item-section>{{ value['更新時間'] }}</q-item-section>
         <q-item-section>
           <div class="flex justify-evenly">
@@ -60,35 +44,6 @@
         </q-item-section>
       </q-item>
     </q-list>
-    <div class="canvasContainer" v-show="isShowCanvas">
-      <q-card class="xl:(w-1/2 h-1/2) lg:(w-3/4 h-3/4) md:(w-3/4 h-1/2) grid grid-rows-[0.1fr,1.9fr]">
-        <q-btn class="absolute top-1 right-1 z-3" icon="close" flat rounded dense @click="isShowCanvas = false; caseId = ''; signTargetName = ''; clearCanvas()" />
-        <q-card-section class="p-0">
-          <div class="flex justify-evenly px-3 py-1">
-            <q-btn icon="auto_fix_off" size="lg" flat dense @click="clearCanvas()">
-              <q-tooltip>清空畫布</q-tooltip>
-            </q-btn>
-            <q-btn icon="undo" size="lg" flat dense @click="undoCanvas()">
-              <q-tooltip>上一步</q-tooltip>
-            </q-btn>
-            <q-btn icon="save_as" size="lg" flat dense @click="saveCanvas(); clearCanvas()">
-              <q-tooltip>儲存</q-tooltip>
-            </q-btn>
-          </div>
-        </q-card-section>
-        <q-card-section class="w-full h-full p-0 border-2">
-          <div class="w-full h-full">
-            <canvas id="canvas" class="w-full h-full" />
-          </div>
-        </q-card-section>
-      </q-card>
-    </div>
-    <div class="signContainer" v-show="isShowSign">
-      <div class="relative">
-        <q-btn class="absolute top-0 right-0" icon="close" color="grey-7" @click="isShowSign = false; signSrc = ''" flat round dense />
-        <img :src="signSrc" />
-      </div>
-    </div>
   </div>
 </template>
 
@@ -97,7 +52,6 @@ import { defineComponent, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { paper } from './data'
 import axios from 'axios'
-import SmoothSignature from 'smooth-signature'
 
 export default defineComponent({
   name: 'InspectCaseList',
@@ -116,81 +70,16 @@ export default defineComponent({
         alert(String(err))
       }
     }
-    const updatePerpetratorSign = async (sign) => {
-      try {
-        const formData = new FormData()
-        console.log(caseId)
-        formData.append('caseId', caseId.value)
-        formData.append('perpetratorSign', sign)
-        const response = await axios.post(process.env.API_URL + '/update_perpetrator_sign', formData)
-
-        if (response.data.status === 'success') {
-          alert(response.data.msg)
-        } else {
-          throw new Error(response.data.msg)
-        }
-      } catch (err) {
-        alert(String(err))
-      }
-    }
-    let signature
-    const caseId = ref('')
-    const isShowCanvas = ref(true)
-    const isShowSign = ref(false)
-    const signSrc = ref('')
-    const canvasTargetKey = ref('')
 
     onMounted(() => {
       getInspectCaseList()
-      const canvas = document.getElementById('canvas')
-      signature = new SmoothSignature(canvas, {
-        scale: 4,
-        maxWidth: 10,
-        color: '#000000',
-        bgColor: '#FFFFFF'
-      })
-      isShowCanvas.value = false
-
-      if ('onorientationchange' in window) {
-        window.onorientationchange = (e) => {
-          // const w = window.innerWidth, h = window.innerHeight
-
-          // if (w > h) {
-          //   canvas.style.width = String(Math.ceil(w / 4) * 3) + 'px'
-          //   canvas.style.height = String(Math.ceil(h / 4) * 3) + 'px'
-          // } else {
-          //   canvas.style.width = String(Math.ceil(w / 4) * 3) + 'px'
-          //   canvas.style.height = String(Math.ceil(h / 4) * 1) + 'px'
-          // }
-        }
-      } else if ('screen' in window && 'orientation' in window.screen) {
-        window.screen.orientation.addEventListener('change', (e) => {
-          canvas.style.width = String(Math.floor(window.innerWidth / 4) * 3) + 'px'
-          canvas.style.height = String(Math.floor(window.innerHeight / 4) * 3) + 'px'
-        }, false)
-      }
     })
 
     return {
-      caseId,
+      caseId: ref(''),
       paper,
       router,
       inspectCaseList,
-      isShowCanvas,
-      isShowSign,
-      signSrc,
-      canvasTargetKey,
-      clearCanvas () {
-        signature.clear()
-      },
-      undoCanvas () {
-        signature.undo()
-      },
-      saveCanvas () {
-        const r = signature.getPNG()
-        inspectCaseList.value[canvasTargetKey.value]['行為人簽名'] = r
-        updatePerpetratorSign(r)
-      },
       async getXmlFile (caseId, fileName) {
         try {
           const formData = new FormData()
@@ -216,28 +105,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style lang="sass">
-.canvasContainer
-  display: flex
-  justify-content: center
-  align-items: center
-  position: absolute
-  top: 0
-  left: 0
-  width: 100%
-  height: 100%
-  background-color: rgba(0, 0, 0, 0.5)
-
-.signContainer
-  display: flex
-  justify-content: center
-  align-items: center
-  position: absolute
-  top: 0
-  left: 0
-  width: 100%
-  height: 100%
-  background-color: rgba(0, 0, 0, 0.5)
-
-</style>

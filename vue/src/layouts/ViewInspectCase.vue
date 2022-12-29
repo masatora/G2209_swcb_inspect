@@ -25,8 +25,8 @@
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                       <div class="p-3">
                         <div class="q-gutter-md row items-start">
-                          <q-date v-model="inspectRecord['時間']" mask="YYYY-MM-DD HH:mm" />
-                          <q-time v-model="inspectRecord['時間']" mask="YYYY-MM-DD HH:mm" />
+                          <q-date v-model="inspectRecord['時間']" mask="YYY-MM-DD HH:mm" />
+                          <q-time v-model="inspectRecord['時間']" mask="YYY-MM-DD HH:mm" />
                         </div>
                         <div class="pt-3">
                           <div class="row items-center justify-end my-2">
@@ -219,8 +219,8 @@
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                       <div class="p-3">
                         <div class="q-gutter-md row items-start">
-                          <q-date v-model="inspectRecord['散會']" mask="YYYY-MM-DD HH:mm" />
-                          <q-time v-model="inspectRecord['散會']" mask="YYYY-MM-DD HH:mm" />
+                          <q-date v-model="inspectRecord['散會']" mask="YYY-MM-DD HH:mm" />
+                          <q-time v-model="inspectRecord['散會']" mask="YYY-MM-DD HH:mm" />
                         </div>
                         <div class="pt-3">
                           <div class="row items-center justify-end my-2">
@@ -245,13 +245,13 @@
             </span>
           </div>
           <div class="py-3" v-if="inspectRecord['行為人簽名'].sign.length > 0">
-            <q-carousel class="border-2" v-model="inspectRecord['行為人簽名'].slide" ref="carousel" thumbnails infinite swipeable animated>
+            <q-carousel class="border-2" v-model="inspectRecord['行為人簽名'].slide" ref="obligorSign" thumbnails infinite swipeable animated>
               <template v-for="(v, k) in inspectRecord['行為人簽名'].sign" :key="k">
                 <q-carousel-slide :name="k + 1" :img-src="v" />
               </template>
               <template v-slot:control>
                 <q-carousel-control position="top-left">
-                  <q-btn class="absolute top-0 left-0" icon="delete" color="negative" @click="deletcSign('行為人簽名', $refs.carousel[0].modelValue)" flat round dense>
+                  <q-btn class="absolute top-0 left-0" icon="delete" color="negative" @click="deletcSign('行為人簽名', $refs.obligorSign.modelValue)" flat round dense>
                     <q-tooltip>刪除此簽名</q-tooltip>
                   </q-btn>
                 </q-carousel-control>
@@ -314,6 +314,7 @@ export default defineComponent({
     const inspectRecord = ref({
       案由: '',
       時間: '',
+      本市區公所: { value: '', slide: 1, sign: [] },
       本府局處1: { value: '', slide: 1, sign: [] },
       本府局處2: { value: '', slide: 1, sign: [] },
       本府局處3: { value: '', slide: 1, sign: [] },
@@ -413,7 +414,11 @@ export default defineComponent({
               })(value)
             } else if (key === '行為人基本資料') {
               forEachObjIndexed((v, k) => {
-                inspectRecord.value[k] = v
+                if (k === '行為人簽名') {
+                  inspectRecord.value[k].sign = v
+                } else {
+                  inspectRecord.value[k] = v
+                }
               })(value)
             } else {
               inspectRecord.value[key] = value
@@ -443,10 +448,11 @@ export default defineComponent({
       const result = {}
       try {
         forEachObjIndexed((v, k) => {
-          console.log(v, k)
-          if (v.value !== undefined) {
+          if (v.sign !== undefined) {
             if (['行政區', '地段'].includes(k)) {
               result[k] = v.label
+            } else if (k === '行為人簽名') {
+              result[k] = v.sign
             } else {
               result[k] = v.value
               result[k + '簽名'] = v.sign
@@ -459,7 +465,7 @@ export default defineComponent({
                 throw new Error(k + '最多可上傳 8 張')
               }
             } else {
-              if (['其他1', '其他2', '其他違規項目', '其他會勘結論'].includes(k)) {
+              if (['本市區公所', '本府局處2', '本府局處3', '本府地政事務所', '本府警察局', '本府違章建築拆除大隊', '其他1', '其他2', '其他違規項目', '其他會勘結論'].includes(k)) {
                 result[k] = v
               } else {
                 if (v !== '') {
@@ -487,16 +493,6 @@ export default defineComponent({
         bgColor: '#FFFFFF'
       })
       isShowCanvas.value = false
-
-      if ('onorientationchange' in window) {
-        window.onorientationchange = (e) => {
-          signature.getRotateCanvas(90)
-        }
-      } else if ('screen' in window && 'orientation' in window.screen) {
-        window.screen.orientation.addEventListener('change', (e) => {
-          signature.getRotateCanvas(90)
-        }, false)
-      }
     })
 
     return {

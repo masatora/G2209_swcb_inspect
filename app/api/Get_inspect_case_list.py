@@ -15,7 +15,7 @@ class Get_inspect_case_list(HTTPMethodView):
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
           cursor.execute('''
             SELECT
-              案件編號, 案由, 行為人簽名, 填寫人,
+              案件編號, 案由,
               土地基本資料 ->> '行政區' AS 行政區,
               行為人基本資料 ->> '行為人姓名' AS 行為人姓名,
               TO_CHAR(時間, 'YYYY-MM-DD HH24:MI') AS 案件時間,
