@@ -25,7 +25,7 @@ export const infoPerson = [
   { name: '行為人住址', type: 'input', label: '請輸入行為人住址' }
 ]
 export const violation = [
-  { id: '0', data: '無違規項目' },
+  { id: '0', data: '' },
   { id: '1', data: '探礦、採礦、鑿青、採取土石、設置有關附屬設施' },
   { id: '2', data: '修建鐵路、公路、其他道路、溝渠' },
   { id: '3', data: '開發建築用地' },
@@ -41,12 +41,13 @@ export const violation = [
   { id: '13', data: '超限利用' }
 ]
 export const conclusion = [
-  { id: '0', data: '無' },
+  { id: '0', data: '' },
   { id: '1', data: '不當使用山坡地部份依據水土保持法相關法規辦理。' },
   { id: '2', data: '涉違反其他法令部份，請各有關單位逕依權責卓處。' },
   { id: '3', data: '現場立即停工。並作妥相關防災措施（現場如未停工，將施以連續處分。另如有裸露地應配合草蓆或塑膠布覆蓋以防止表土流失）。' },
   { id: '4', data: '已致生水土流失或毀損水土保持之處理與維護設施。' },
-  { id: '5', data: '請依水土保持服務團輔導事項辦理。' }
+  { id: '5', data: '請依水土保持服務團輔導事項辦理。' },
+  { id: '6', data: '其他。' }
 ]
 export const paper = [
   { id: '1', type: '限改函', data: '拆牆' },

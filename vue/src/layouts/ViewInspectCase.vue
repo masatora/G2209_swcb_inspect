@@ -25,8 +25,8 @@
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                       <div class="p-3">
                         <div class="q-gutter-md row items-start">
-                          <q-date v-model="inspectRecord['時間']" mask="YYY-MM-DD HH:mm" />
-                          <q-time v-model="inspectRecord['時間']" mask="YYY-MM-DD HH:mm" />
+                          <q-date v-model="inspectRecord['時間']" mask="YYYY-MM-DD HH:mm" />
+                          <q-time v-model="inspectRecord['時間']" mask="YYYY-MM-DD HH:mm" />
                         </div>
                         <div class="pt-3">
                           <div class="row items-center justify-end my-2">
@@ -61,7 +61,7 @@
                   <q-btn icon="draw" color="grey-3" class="text-grey-7" @click="isShowCanvas = !isShowCanvas; signTargetName = _attendees.name" dense />
                 </span>
               </div>
-              <div class="py-3" v-if="inspectRecord[_attendees.name].sign.length > 0">
+              <!-- <div class="py-3" v-if="inspectRecord[_attendees.name].sign.length > 0">
                 <q-carousel class="border-2" v-model="inspectRecord[_attendees.name].slide" ref="carousel" thumbnails infinite swipeable animated>
                   <template v-for="(v, k) in inspectRecord[_attendees.name].sign" :key="k">
                     <q-carousel-slide :name="k + 1" :img-src="v" />
@@ -74,7 +74,7 @@
                     </q-carousel-control>
                   </template>
                 </q-carousel>
-              </div>
+              </div> -->
             </div>
           </q-card-section>
         </q-card>
@@ -219,8 +219,8 @@
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                       <div class="p-3">
                         <div class="q-gutter-md row items-start">
-                          <q-date v-model="inspectRecord['散會']" mask="YYY-MM-DD HH:mm" />
-                          <q-time v-model="inspectRecord['散會']" mask="YYY-MM-DD HH:mm" />
+                          <q-date v-model="inspectRecord['散會']" mask="YYYY-MM-DD HH:mm" />
+                          <q-time v-model="inspectRecord['散會']" mask="YYYY-MM-DD HH:mm" />
                         </div>
                         <div class="pt-3">
                           <div class="row items-center justify-end my-2">

@@ -25,8 +25,8 @@
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                       <div class="p-3">
                         <div class="q-gutter-md row items-start">
-                          <q-date v-model="inspectRecord['時間']" mask="YYY-MM-DD HH:mm" />
-                          <q-time v-model="inspectRecord['時間']" mask="YYY-MM-DD HH:mm" />
+                          <q-date v-model="inspectRecord['時間']" mask="YYYY-MM-DD HH:mm" />
+                          <q-time v-model="inspectRecord['時間']" mask="YYYY-MM-DD HH:mm" />
                         </div>
                         <div class="pt-3">
                           <div class="row items-center justify-end my-2">
@@ -125,7 +125,7 @@
                 <span>{{ _infoPerson.name }}</span>
                 <span>
                   <template v-if="_infoPerson.type === 'input_date'">
-                    <q-input v-model="inspectRecord[_infoPerson.name]" :label=_infoPerson.label mask="###-##-##" fill-mask filled dense />
+                    <q-input v-model="inspectRecord[_infoPerson.name]" :label=_infoPerson.label mask="####-##-##" fill-mask filled dense />
                   </template>
                   <template v-else>
                     <q-input v-model="inspectRecord[_infoPerson.name]" :label=_infoPerson.label filled dense />
@@ -222,8 +222,8 @@
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                       <div class="p-3">
                         <div class="q-gutter-md row items-start">
-                          <q-date v-model="inspectRecord['散會']" mask="YYY-MM-DD HH:mm" />
-                          <q-time v-model="inspectRecord['散會']" mask="YYY-MM-DD HH:mm" />
+                          <q-date v-model="inspectRecord['散會']" mask="YYYY-MM-DD HH:mm" />
+                          <q-time v-model="inspectRecord['散會']" mask="YYYY-MM-DD HH:mm" />
                         </div>
                         <div class="pt-3">
                           <div class="row items-center justify-end my-2">
