@@ -125,7 +125,7 @@
                 <span>{{ _infoPerson.name }}</span>
                 <span>
                   <template v-if="_infoPerson.type === 'input_date'">
-                    <q-input v-model="inspectRecord[_infoPerson.name]" :label=_infoPerson.label mask="####-##-##" fill-mask filled dense />
+                    <q-input v-model="inspectRecord[_infoPerson.name]" :label=_infoPerson.label mask="###-##-##" fill-mask filled dense />
                   </template>
                   <template v-else>
                     <q-input v-model="inspectRecord[_infoPerson.name]" :label=_infoPerson.label filled dense />

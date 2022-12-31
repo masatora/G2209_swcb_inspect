@@ -106,7 +106,9 @@ export default defineComponent({
         try {
           const formData = new FormData()
           formData.append('caseId', caseId)
-          const response = await axios.post(process.env.API_URL + '/get_inspect_case_pdf', formData)
+          const response = await axios.post(process.env.API_URL + '/get_inspect_case_pdf', formData, {
+            responseType: 'blob'
+          })
 
           if (response.data !== '') {
             const link = document.createElement('a')

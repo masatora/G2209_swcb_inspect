@@ -70,7 +70,7 @@ class Update_inspect_case(HTTPMethodView):
             if key not in ['本市區公所', '本府局處2', '本府局處3', '本府地政事務所', '本府警察局', '本府違章建築拆除大隊', '其他1', '其他2', '其他違規項目', '其他會勘結論']:
               assert type(value[0]) and value[0] != '', key + '不可為空值'
             data[k] = value[0]
-      print(data['行政區'], data['地段'])
+
       with connect(**loads(web.config['DATABASE_CONFIG_INSPECT'])) as conn:
         with conn.cursor() as cursor:
           now = datetime.now()
@@ -138,7 +138,7 @@ class Update_inspect_case(HTTPMethodView):
       resp = { 'status': 'fail', 'msg': err_str }
     except DatabaseError as e:
       err_str = str(e)
-      resp = { 'status': 'fail', 'msg': err_str }
+      resp = { 'status': 'fail', 'msg': '資料庫連線錯誤' }
     except Exception as e:
       err_str = str(e)
       resp = { 'status': 'fail', 'msg': '修改會勘紀錄表 API 暫時無法服務' }

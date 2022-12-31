@@ -80,7 +80,7 @@ class Get_xml_file(HTTPMethodView):
       resp = { 'status': 'fail', 'msg': err_str }
     except DatabaseError as e:
       err_str = str(e)
-      resp = { 'status': 'fail', 'msg': err_str }
+      resp = { 'status': 'fail', 'msg': '資料庫連線錯誤' }
     except Exception as e:
       err_str = str(e)
       resp = { 'status': 'fail', 'msg': '取得案件資料暫時無法服務' }

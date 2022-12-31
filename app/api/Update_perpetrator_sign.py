@@ -37,7 +37,7 @@ class Update_perpetrator_sign(HTTPMethodView):
       resp = { 'status': 'fail', 'msg': err_str }
     except DatabaseError as e:
       err_str = str(e)
-      resp = { 'status': 'fail', 'msg': err_str }
+      resp = { 'status': 'fail', 'msg': '資料庫連線錯誤' }
     except Exception as e:
       err_str = str(e)
       resp = { 'status': 'fail', 'msg': '更新行為人簽名 API 暫時無法服務' }

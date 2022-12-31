@@ -35,7 +35,7 @@ class Get_inspect_case_pdf(HTTPMethodView):
 
   async def post(self, request):
     try:
-      # assert request.content_type.find('multipart/form-data') != -1, '無法處理的 request'
+      assert request.content_type.find('multipart/form-data') != -1, '無法處理的 request'
 
       resp = {}
       case_id = request.form.get('caseId')
@@ -45,7 +45,7 @@ class Get_inspect_case_pdf(HTTPMethodView):
         with conn.cursor(cursor_factory=RealDictCursor) as cursor:
           cursor.execute('''
             SELECT
-              案由, 會勘單位與人員, 土地基本資料, 行為人基本資料, 違規類別, 輔導類別, 各單位意見, 行為人意見, 會勘結論, 散會, 現場照片,
+              案由, 會勘單位與人員, 土地基本資料, 行為人基本資料, 違規類別, 輔導類別, 各單位意見, 行為人意見, 會勘結論, 散會, 現場照片, 建立時間,
               TO_CHAR(時間, 'YYYY-MM-DD HH24:MI') AS 時間,
               TO_CHAR(散會, 'YYYY-MM-DD HH24:MI') AS 散會
             FROM hillside_inspect
@@ -56,9 +56,10 @@ class Get_inspect_case_pdf(HTTPMethodView):
           assert cursor.rowcount > 0, '無相關會勘紀錄表資料'
           row = cursor.fetchone()
 
-      file_name = '違規使用山坡地案件現場會勘紀錄表'
-      filepath = join(web.config['STATIC_PATH'], file_name +'.pdf')
-      with open(join(web.config['STATIC_PATH'], file_name +'.html'), encoding="utf-8") as html:
+      file_name = row['建立時間'].strftime('%Y%m%d%H%M') + '_' + row['案由']
+      filepath = join(web.config['STATIC_PATH'], 'pdf', file_name +'.pdf')
+
+      with open(join(web.config['STATIC_PATH'], '違規使用山坡地案件現場會勘紀錄表.html'), encoding="utf-8") as html:
         violate_string, violate_arr = self.gen_data_list('violate', row['違規類別'])
         inspect_string, inspect_arr = self.gen_data_list('inspect', row['會勘結論'])
         from_string(html.read().format(args={
@@ -136,7 +137,6 @@ class Get_inspect_case_pdf(HTTPMethodView):
         return json(resp, ensure_ascii=False)
       else:
         return await file(filepath, mime_type="application/pdf")
-
 
   def gen_sign_img(self, data):
     result = ''

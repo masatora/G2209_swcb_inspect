@@ -449,7 +449,6 @@ export default defineComponent({
       try {
         forEachObjIndexed((v, k) => {
           if (typeof v === 'object' && v !== null && !Array.isArray(v)) {
-            console.log(k, v)
             if (['行政區', '地段'].includes(k)) {
               result[k] = v.label
             } else if (k === '行為人簽名') {
@@ -494,7 +493,6 @@ export default defineComponent({
         bgColor: '#FFFFFF'
       })
       isShowCanvas.value = false
-      console.log(inspectRecord.value)
     })
 
     return {
@@ -506,7 +504,6 @@ export default defineComponent({
       },
       saveCanvas () {
         const r = signature.getPNG()
-        console.log(signTargetName.value, inspectRecord.value[signTargetName.value], r)
         inspectRecord.value[signTargetName.value].sign.push(r)
         alert('已儲存簽名檔')
       },
