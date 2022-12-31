@@ -64,13 +64,13 @@ class Update_inspect_case(HTTPMethodView):
       for (key, value) in request.form.items():
         if key != '案件編號':
           k = sub('\[\d\]', '', key)
-          if k in ['本市區公所簽名', '本府局處1簽名', '本府局處2簽名', '本府局處3簽名', '本府地政事務所簽名', '本府警察局簽名', '本府違章建築拆除大隊簽名', '違規類別', '會勘結論', '現場照片', '行為人簽名']:
+          if k in ['本市區公所簽名', '本府局處1簽名', '本府局處2簽名', '本府局處3簽名', '本府地政事務所簽名', '本府警察局簽名', '本府違章建築拆除大隊簽名', '其他1簽名', '其他2簽名', '違規類別', '會勘結論', '現場照片', '行為人簽名']:
             data[k].append(value[0])
           else:
             if key not in ['本市區公所', '本府局處2', '本府局處3', '本府地政事務所', '本府警察局', '本府違章建築拆除大隊', '其他1', '其他2', '其他違規項目', '其他會勘結論']:
               assert type(value[0]) and value[0] != '', key + '不可為空值'
             data[k] = value[0]
-
+      print(data['行政區'], data['地段'])
       with connect(**loads(web.config['DATABASE_CONFIG_INSPECT'])) as conn:
         with conn.cursor() as cursor:
           now = datetime.now()

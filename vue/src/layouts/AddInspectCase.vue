@@ -377,7 +377,7 @@ export default defineComponent({
       const result = {}
       try {
         forEachObjIndexed((v, k) => {
-          if (v.sign !== undefined) {
+          if (typeof v === 'object' && v !== null && !Array.isArray(v)) {
             if (['行政區', '地段'].includes(k)) {
               result[k] = v.label
             } else if (k === '行為人簽名') {

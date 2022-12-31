@@ -61,7 +61,7 @@
                   <q-btn icon="draw" color="grey-3" class="text-grey-7" @click="isShowCanvas = !isShowCanvas; signTargetName = _attendees.name" dense />
                 </span>
               </div>
-              <!-- <div class="py-3" v-if="inspectRecord[_attendees.name].sign.length > 0">
+              <div class="py-3" v-if="inspectRecord[_attendees.name].sign.length > 0">
                 <q-carousel class="border-2" v-model="inspectRecord[_attendees.name].slide" ref="carousel" thumbnails infinite swipeable animated>
                   <template v-for="(v, k) in inspectRecord[_attendees.name].sign" :key="k">
                     <q-carousel-slide :name="k + 1" :img-src="v" />
@@ -74,7 +74,7 @@
                     </q-carousel-control>
                   </template>
                 </q-carousel>
-              </div> -->
+              </div>
             </div>
           </q-card-section>
         </q-card>
@@ -448,7 +448,8 @@ export default defineComponent({
       const result = {}
       try {
         forEachObjIndexed((v, k) => {
-          if (v.sign !== undefined) {
+          if (typeof v === 'object' && v !== null && !Array.isArray(v)) {
+            console.log(k, v)
             if (['行政區', '地段'].includes(k)) {
               result[k] = v.label
             } else if (k === '行為人簽名') {
@@ -493,6 +494,7 @@ export default defineComponent({
         bgColor: '#FFFFFF'
       })
       isShowCanvas.value = false
+      console.log(inspectRecord.value)
     })
 
     return {
@@ -504,6 +506,7 @@ export default defineComponent({
       },
       saveCanvas () {
         const r = signature.getPNG()
+        console.log(signTargetName.value, inspectRecord.value[signTargetName.value], r)
         inspectRecord.value[signTargetName.value].sign.push(r)
         alert('已儲存簽名檔')
       },
