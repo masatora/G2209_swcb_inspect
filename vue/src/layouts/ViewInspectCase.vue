@@ -25,8 +25,8 @@
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                       <div class="p-3">
                         <div class="q-gutter-md row items-start">
-                          <q-date v-model="inspectRecord['時間']" mask="YYY-MM-DD HH:mm" />
-                          <q-time v-model="inspectRecord['時間']" mask="YYY-MM-DD HH:mm" />
+                          <q-date v-model="inspectRecord['時間']" mask="YYYY-MM-DD HH:mm" />
+                          <q-time v-model="inspectRecord['時間']" mask="YYYY-MM-DD HH:mm" />
                         </div>
                         <div class="pt-3">
                           <div class="row items-center justify-end my-2">
@@ -219,8 +219,8 @@
                     <q-popup-proxy cover transition-show="scale" transition-hide="scale">
                       <div class="p-3">
                         <div class="q-gutter-md row items-start">
-                          <q-date v-model="inspectRecord['散會']" mask="YYY-MM-DD HH:mm" />
-                          <q-time v-model="inspectRecord['散會']" mask="YYY-MM-DD HH:mm" />
+                          <q-date v-model="inspectRecord['散會']" mask="YYYY-MM-DD HH:mm" />
+                          <q-time v-model="inspectRecord['散會']" mask="YYYY-MM-DD HH:mm" />
                         </div>
                         <div class="pt-3">
                           <div class="row items-center justify-end my-2">
@@ -448,7 +448,8 @@ export default defineComponent({
       const result = {}
       try {
         forEachObjIndexed((v, k) => {
-          if (v.sign !== undefined) {
+          if (typeof v === 'object' && v !== null && !Array.isArray(v)) {
+            console.log(k, v)
             if (['行政區', '地段'].includes(k)) {
               result[k] = v.label
             } else if (k === '行為人簽名') {
@@ -493,6 +494,7 @@ export default defineComponent({
         bgColor: '#FFFFFF'
       })
       isShowCanvas.value = false
+      console.log(inspectRecord.value)
     })
 
     return {
@@ -504,6 +506,7 @@ export default defineComponent({
       },
       saveCanvas () {
         const r = signature.getPNG()
+        console.log(signTargetName.value, inspectRecord.value[signTargetName.value], r)
         inspectRecord.value[signTargetName.value].sign.push(r)
         alert('已儲存簽名檔')
       },

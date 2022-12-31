@@ -30,6 +30,7 @@
             </q-btn>
             <q-btn-dropdown icon="file_download" color="primary" size="12px" dense>
               <q-list>
+                <q-item @click="getPdfFile(value['案件編號'])" v-close-popup clickable bordered>下載為 PDF</q-item>
                 <q-item v-for="_paper, i of paper" :key="i" v-close-popup @click="getXmlFile(value['案件編號'], `${_paper.type}(${_paper.data})`)" clickable bordered>
                   <q-item-section>
                     <div class="border-gray-500">
@@ -92,6 +93,26 @@ export default defineComponent({
             link.href = window.URL.createObjectURL(new Blob([response.data], { type: 'text/plain' }))
             link.setAttribute('target', '_blank')
             link.setAttribute('download', fileName + '.xml')
+            link.click()
+            link.remove()
+          } else {
+            throw new Error(response.data.msg)
+          }
+        } catch (err) {
+          alert(String(err))
+        }
+      },
+      async getPdfFile (caseId) {
+        try {
+          const formData = new FormData()
+          formData.append('caseId', caseId)
+          const response = await axios.post(process.env.API_URL + '/get_inspect_case_pdf', formData)
+
+          if (response.data !== '') {
+            const link = document.createElement('a')
+            link.href = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }))
+            link.setAttribute('target', '_blank')
+            link.setAttribute('download', '違規使用山坡地案件現場會勘紀錄表.pdf')
             link.click()
             link.remove()
           } else {

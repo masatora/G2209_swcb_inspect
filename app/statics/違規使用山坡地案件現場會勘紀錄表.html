@@ -2,30 +2,33 @@
 <html>
   <head>
     <style>
-      html, body {
+      html, body {{
         padding: 0;
         margin: 0;
-      }
+      }}
+      .tableStyle {{
+        width: 100%;
+      }}
     </style>
   </head>
   <body>
     <div style="display: flex; justify-content: center">
       <div style="width: 950px">
-        <h3 style="text-align: center;">新北市農業局違規使用山坡地案件現場會勘紀錄表</h3>
-        <p>一、案由：</p>
-        <p>二、時間：</p>
+        <h2 style="text-align: center;">新北市農業局違規使用山坡地案件現場會勘紀錄表</h2>
+        <p>一、案由：{args[案由]}</p>
+        <p>二、時間：{args[時間]}</p>
         <p>三、會勘單位及人員：</p>
-        <table>
+        <table class="tableStyle" border="1" rules="all">
           <tr>
-            <td>本市 {args[本市區公所]} 區公所</td>
-            <td>{args[本市區公所簽名]}</td>
-            <td>本府 {args[本府局處1]} 局</td>
-            <td>{args[本府局處1簽名]}</td>
+            <td width="25%">本市 {args[本市區公所]} 區公所</td>
+            <td width="25%">{args[本市區公所簽名]}</td>
+            <td width="25%">本府 {args[本府局處1]}</td>
+            <td width="25%">{args[本府局處1簽名]}</td>
           </tr>
           <tr>
-            <td>本府 {args[本府局處2]} 局</td>
+            <td>本府 {args[本府局處2]}</td>
             <td>{args[本府局處2簽名]}</td>
-            <td>本府 {args[本府局處3]} 局</td>
+            <td>本府 {args[本府局處3]}</td>
             <td>{args[本府局處3簽名]}</td>
           </tr>
           <tr>
@@ -43,30 +46,119 @@
           <tr>
             <td>其他2 {args[其他2]}</td>
             <td>{args[其他2簽名]}</td>
+            <td></td>
+            <td></td>
           </tr>
         </table>
-        <p>四、基本資料：</p>
-        <table>
+        <p>四、基本資料：（衛星定位座標 TWD97；X： {args[TWD97_X]} Y： {args[TWD97_Y]} ）</p>
+        <table class="tableStyle" border="1" rules="all">
           <tr>
             <td>土地座落</td>
-            <td></td>
+            <td colspan="3">本市 {args[行政區]} {args[地段]} {args[小段]}小段 {args[地號]}地號</td>
           </tr>
           <tr>
-            <td>使用面積</td>
-            <td>約 平方公尺</td>
-            <td>所有權人</td>
-            <td></td>
+            <td width="15%">使用面積</td>
+            <td width="30%">約 {args[使用面積]} 平方公尺</td>
+            <td width="25%">所有權人</td>
+            <td width="30%">{args[所有權人]}</td>
           </tr>
           <tr>
             <td>行為人</td>
+            <td colspan="3">
+              <div style="display: inline">
+                <span style="display: inline-block; width: 49%">
+                  <p>姓名：{args[行為人姓名]}</p>
+                  <p>行為人身分證：{args[行為人身分證]}</p>
+                  <p>住址：{args[行為人住址]}</p>
+                </div>
+                <span style="display: inline-block; position: relative; top: -40px; width: 50%">
+                  <p>出生年月日：{args[行為人出生年月日]}</p>
+                  <p>電話：{args[行為人電話]}</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+        <p>五、違規類別：（請填註編號：{args[違規類別編號]}）</p>
+        <table class="tableStyle" border="1" rules="all">
+          <tr>
+            <td width="3%">{args[違規類別編號1]}</td>
+            <td width="48%">1.探礦、採礦、鑿青、採取土石、設置有關附屬設施</td>
+            <td width="3%">{args[違規類別編號8]}</td>
+            <td width="48%">8.設置軍事訓練場</td>
+          </tr>
+          <tr>
+            <td>{args[違規類別編號2]}</td>
+            <td>2.修建鐵路、公路、其他道路、溝渠</td>
+            <td>{args[違規類別編號9]}</td>
+            <td>9.堆積土石</td>
+          </tr>
+          <tr>
+            <td>{args[違規類別編號3]}</td>
+            <td>3.開發建築用地</td>
+            <td>{args[違規類別編號10]}</td>
+            <td>10.處理廢棄物</td>
+          </tr>
+          <tr>
+            <td>{args[違規類別編號4]}</td>
+            <td>4.設置公園</td>
+            <td>{args[違規類別編號11]}</td>
+            <td>11.其他開挖整地</td>
+          </tr>
+          <tr>
+            <td>{args[違規類別編號5]}</td>
+            <td>5.設置墳墓</td>
+            <td>{args[違規類別編號12]}</td>
+            <td>12.修築農路或整坡作業</td>
+          </tr>
+          <tr>
+            <td>{args[違規類別編號6]}</td>
+            <td>6.設置遊憩用地</td>
+            <td>{args[違規類別編號13]}</td>
+            <td>13.超限利用</td>
+          </tr>
+          <tr>
+            <td>{args[違規類別編號7]}</td>
+            <td>7.設置運動場地</td>
+            <td></td>
             <td></td>
           </tr>
         </table>
-        <p>五、違規類別：</p>
-        <p>六、輔導類別：</p>
+        <p>六、輔導類別：{args[輔導類別]}移請水土保持服務團輔導實施水土保持處理與維護。</p>
         <p>七、各單位意見：</p>
-        <p>八、會勘結論：</p>
-        <p>九、散會：</p>
+        <div style="padding-left: 20px">
+            {args[各單位意見]}
+            <p>請行為人陳述意見：</p>
+            {args[行為人意見]}
+        </div>
+        <p>八、會勘結論：（請填註編號：{args[會勘結論編號]}）</p>
+        <table class="tableStyle" border="1" rules="all">
+          <tr>
+            <td width="3%">{args[會勘結論編號1]}</td>
+            <td>1.不當使用山坡地部份依據水土保持法相關法規辦理。</td>
+          </tr>
+          <tr>
+            <td>{args[會勘結論編號2]}</td>
+            <td>2.涉違反其他法令部份，請各有關單位逕依權責卓處。</td>
+          </tr>
+          <tr>
+            <td>{args[會勘結論編號3]}</td>
+            <td>3.現場立即停工。並作妥相關防災措施（現場如未停工，將施以連續處分。另如有裸露地應配合草蓆或塑膠布覆蓋以防止表土流失）。</td>
+          </tr>
+          <tr>
+            <td>{args[會勘結論編號4]}</td>
+            <td>4.已致生水土流失或毀損水土保持之處理與維護設施。</td>
+          </tr>
+          <tr>
+            <td>{args[會勘結論編號5]}</td>
+            <td>5.請依水土保持服務團輔導事項辦理。</td>
+          </tr>
+        </table>
+        <p>九、散會：{args[散會]}</p>
+        <div>
+          <p>以上經行為人親閲無誤後始簽名：</p>
+          {args[行為人簽名]}
+        </div>
       </div>
     </div>
   </body>
