@@ -1,0 +1,10 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: backend
+  image: g2209_swcb_inspect_be
+  commands:
+  - python service.py
