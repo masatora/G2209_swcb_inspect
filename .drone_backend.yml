@@ -5,6 +5,7 @@ name: default
 
 steps:
 - name: backend
-  image: g2209_swcb_inspect_be
+  image: python:3.8.10
   commands:
-  - python service.py
+  - python -h
+...
