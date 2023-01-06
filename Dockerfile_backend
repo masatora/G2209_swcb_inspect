@@ -1,6 +1,7 @@
 FROM python:3.8.10
 
 ENV TZ=Asia/Taipei
+ENV LANG=zh_TW.UTF-8
 
 WORKDIR /app
 
