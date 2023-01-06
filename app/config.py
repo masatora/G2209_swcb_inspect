@@ -5,14 +5,13 @@ web.config.OAS = False
 web.config.LOCAL_CERT_CREATOR = 'trustme'
 
 if web.config['APP_ENV'] == 'prod':
-  project_path = join('D:\\', 'G2209_swcb_inspect')
+  project_path = join('/', 'app')
   web.config.update({
-    'DEBUG': False,
+    'DEBUG': True,
     'WORKERS': 16,
     'CORS_ORIGINS': '*',
     'PROJECT_PATH': project_path,
-    'STATIC_PATH': join(project_path, 'app', 'statics'),
-    'PUBLIC_PATH': join(project_path, 'vue')
+    'STATIC_PATH': join(project_path, 'statics')
   })
 elif web.config['APP_ENV'] == 'stage':
   project_path = join('D:\\', 'G2209_swcb_inspect')
@@ -21,8 +20,7 @@ elif web.config['APP_ENV'] == 'stage':
     'WORKERS': 1,
     'CORS_ORIGINS': '*',
     'PROJECT_PATH': project_path,
-    'STATIC_PATH': join(project_path, 'app', 'statics'),
-    'PUBLIC_PATH': join(project_path, 'vue')
+    'STATIC_PATH': join(project_path, 'app', 'statics')
   })
 elif web.config['APP_ENV'] == 'beta':
   project_path = join('D:\\', 'ProgramFiles', 'project', 'G2209_swcb_inspect')
@@ -31,8 +29,7 @@ elif web.config['APP_ENV'] == 'beta':
     'WORKERS': 1,
     'CORS_ORIGINS': '*',
     'PROJECT_PATH': project_path,
-    'STATIC_PATH': join(project_path, 'app', 'statics'),
-    'PUBLIC_PATH': join(project_path, 'vue', 'public')
+    'STATIC_PATH': join(project_path, 'app', 'statics')
   })
 else:
   project_path = join('C:\\', 'Users', 'masatora', 'git_repo', 'G2209_swcb_inspect')
@@ -41,6 +38,5 @@ else:
     'WORKERS': 1,
     'CORS_ORIGINS': '*',
     'PROJECT_PATH': project_path,
-    'STATIC_PATH': join(project_path, 'app', 'statics'),
-    'PUBLIC_PATH': join(project_path, 'vue', 'public')
+    'STATIC_PATH': join(project_path, 'app', 'statics')
   })

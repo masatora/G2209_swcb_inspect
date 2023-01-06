@@ -17,7 +17,8 @@ module.exports = configure(function (ctx) {
   let publicPath = ''
 
   if (ctx.prod) {
-    publicPath = '/ntpcswc'
+    // publicPath = '/ntpcswc'
+    publicPath = '/'
     envConfig = env.prod
   } else {
     publicPath = '/'

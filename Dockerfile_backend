@@ -1,0 +1,17 @@
+FROM python:3.8.10
+
+ENV TZ=Asia/Taipei
+
+WORKDIR /app
+
+COPY ./app /app
+COPY ./requirements /app
+
+RUN apt update && apt install -y wkhtmltopdf && apt-get install -y fonts-wqy-microhei ttf-wqy-microhei fonts-wqy-zenhei ttf-wqy-zenhei
+RUN pip install --no-cache-dir -r /app/requirements
+RUN fc-cache -f -v
+
+CMD ["python", "server.py"]
+
+EXPOSE 10091
+EXPOSE 5432

@@ -36,3 +36,4 @@ app/api/apply_plan/__pycache__
 app/api/apply_plan/__pycache__
 *.pyc
 vue/dist
+.env_backend

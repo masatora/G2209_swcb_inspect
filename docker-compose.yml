@@ -1,0 +1,31 @@
+version: "3"
+services:
+  g2209-swcb-inspect-backend:
+    image: g2209_swcb_inspect_backend
+    container_name: g2209_swcb_inspect_backend
+    restart: always
+    ports:
+      - 10091:10091
+      - 5432:5432
+    networks:
+      - g2209
+    environment:
+      TZ: Asia/Taipei
+    env_file:
+      - .env_backend
+
+  g2209-swcb-inspect-frontend:
+    image: g2209_swcb_inspect_frontend
+    container_name: g2209_swcb_inspect_frontend
+    restart: always
+    ports:
+      - 10090:10090
+    networks:
+      - g2209
+    environment:
+      TZ: Asia/Taipei
+
+networks:
+  g2209:
+    name: g2209
+    driver: bridge
