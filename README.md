@@ -39,3 +39,4 @@ docker run -d --name g2209_inspect_backend -p 10091:10091 -p 5432:5432 --env-fil
 docker build -f Dockerfile_frontend --tag g2209_swcb_inspect_frontend .
 docker run -d --name g2209_inspect_frontend -p 10090:10090 g2209_swcb_inspect_frontend
 ```
+test
