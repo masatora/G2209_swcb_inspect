@@ -8,8 +8,8 @@ module.exports = {
     API_URL: 'http://192.168.2.110:10091/api'
   },
   stage: {
-    BASE_URL: 'https://iot.thinktron.co/ntpcswc',
-    API_URL: 'https://iot.thinktron.co/ntpcswc/api'
+    BASE_URL: 'https://www.ntpcswc.ntpc.gov.tw/swcb-ins',
+    API_URL: 'https://www.ntpcswc.ntpc.gov.tw/swcb-ins/api'
   },
   // prod: {
   //   BASE_URL: 'https://iot.thinktron.co/ntpcswc',

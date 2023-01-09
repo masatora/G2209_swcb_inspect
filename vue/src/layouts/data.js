@@ -75,7 +75,7 @@ export const paper = [
   { id: '23', type: '處分簽', data: '自有、無限改、有陳述' },
   { id: '24', type: '處分簽', data: '自有、無限改、無陳述' },
   { id: '25', type: '陳述', data: '地主未到' },
-  { id: '26', type: '處分簽', data: '有土同、人未到' },
-  { id: '27', type: '處分簽', data: '缺土同' },
+  { id: '26', type: '陳述', data: '有土同、人未到' },
+  { id: '27', type: '陳述', data: '缺土同' },
   { id: '28', type: '無違規請公所加強巡查', data: '' }
 ]

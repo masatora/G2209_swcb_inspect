@@ -17,12 +17,12 @@ module.exports = configure(function (ctx) {
   let publicPath = ''
 
   if (ctx.prod) {
-    // publicPath = '/ntpcswc'
-    publicPath = '/'
-    envConfig = env.prod
+    publicPath = '/swcb-ins'
+    envConfig = env.stage
   } else {
     publicPath = '/'
     if (process.env.SANIC_APP_ENV === 'stage') {
+      publicPath = '/swcb-ins'
       envConfig = env.stage
     } else if (process.env.SANIC_APP_ENV === 'beta') {
       envConfig = env.beta

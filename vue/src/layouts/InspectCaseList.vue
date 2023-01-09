@@ -31,7 +31,7 @@
             <q-btn-dropdown icon="file_download" color="primary" size="12px" dense>
               <q-list>
                 <q-item @click="getPdfFile(value['案件編號'])" v-close-popup clickable bordered>下載為 PDF</q-item>
-                <q-item v-for="_paper, i of paper" :key="i" v-close-popup @click="getXmlFile(value['案件編號'], `${_paper.type}(${_paper.data})`)" clickable bordered>
+                <q-item v-for="_paper, i of paper" :key="i" v-close-popup @click="getXmlFile(value['案件編號'], (_paper.type + (_paper.data === '' ? '' : `(${_paper.data})`)))" clickable bordered>
                   <q-item-section>
                     <div class="border-gray-500">
                       <q-item-label>{{ _paper.type }}</q-item-label>

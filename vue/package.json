@@ -2,7 +2,7 @@
   "name": "g2209-swcb-inspect",
   "version": "0.0.1",
   "description": "新北市政府農業局違規使用山坡地案件現場會勘紀錄表",
-  "productName": "G2209_swcb_inspect",
+  "productName": "新北市政府農業局違規使用山坡地案件現場會勘紀錄表",
   "author": "tora.yeh",
   "private": true,
   "scripts": {
@@ -21,7 +21,7 @@
     "json-form-data": "^1.7.2",
     "pinia": "^2.0.27",
     "proj4": "^2.8.0",
-    "quasar": "^2.11.3",
+    "quasar": "^2.11.4",
     "ramda": "^0.28.0",
     "smooth-signature": "^1.0.12",
     "vite-plugin-windicss": "^1.8.10",

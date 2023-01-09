@@ -9,7 +9,7 @@ platform:
 
 steps:
 - name: backend
-  image: g2209_swcb_inspect_backend:latest
+  image: g2209_swcb_inspect_backend
   commands:
   - python server.py
 ...

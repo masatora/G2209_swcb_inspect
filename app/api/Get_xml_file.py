@@ -43,6 +43,7 @@ class Get_xml_file(HTTPMethodView):
       assert exists(filepath), '檔案不存在'
 
       with open(filepath, encoding="utf-8") as xml:
+        obligor_birthday = row['行為人出生年月日'].split('-')
         xml_content = xml.read().format(args={
           '案由': row['案由'],
           '違規類別': row['違規類別'],
@@ -66,12 +67,14 @@ class Get_xml_file(HTTPMethodView):
           '使用面積': row['使用面積'],
           '所有權人': row['所有權人'],
           '行為人姓名': row['行為人姓名'],
-          '行為人出生年月日': row['行為人出生年月日'],
+          '行為人出生年月日': obligor_birthday[0] + '年' + obligor_birthday[1] + '月' + obligor_birthday[2] + '日',
           '行為人身分證': row['行為人身分證'],
           '行為人電話': row['行為人電話'],
           '行為人住址': row['行為人住址'],
-          '時間': row['時間'],
-          '散會': row['散會'],
+          '日期': row['時間'].split(' ')[0],
+          '時間': row['時間'].split(' ')[1],
+          '散會日期': row['散會'].split(' ')[0],
+          '散會時間': row['散會'].split(' ')[1],
           '修改時間': row['修改時間'],
           '建立時間': row['建立時間']
         })

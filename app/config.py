@@ -2,7 +2,6 @@ from __init__ import web
 from os.path import join
 
 web.config.OAS = False
-web.config.LOCAL_CERT_CREATOR = 'trustme'
 
 if web.config['APP_ENV'] == 'prod':
   project_path = join('/', 'app')
